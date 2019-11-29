@@ -2,8 +2,8 @@
     <div class="home">
         <div class="block" v-for="(item,index) in list" :key="index">
             <p :id="item.title">{{item.title}}</p>
-            <ul v-for="(val,key) in item.data" :key="key">
-                <li><img :src="val.CoverPhoto" alt=""> <span>{{val.Name}}</span></li>
+            <ul v-for="(val,key) in item.data" :key="key" @click="block(val.MasterID)">
+                <li><img :src="val.CoverPhoto" v-lazy="val.CoverPhoto" alt=""> <span>{{val.Name}}</span></li>
             </ul>
             
         </div>
@@ -13,21 +13,31 @@
                  <li><a :href="'#'+item.title">{{item.title}}</a></li>
             </ul>
         </div>
+        <Popup v-show="flag" :carlist="carlist"></Popup>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
+import Popup from '../../components/popup'
 export default {
     data(){
         return {
-             list:[]
+             list:[],
+             carlist:[],
+             flag:false
         }
     },
     components:{
-
+          Popup
     },
     methods:{
+        async block(id){
+            this.flag = true;
+            let res = await axios.get(`https://baojia.chelun.com/v2-car-getMakeListByMasterBrandId.html?MasterID=${id}`);
+            this.carlist = res.data.data;
+            console.log(this.carlist)
+        },
         async getlist(){
             let res = await axios.get('https://baojia.chelun.com/v2-car-getMasterBrandList.html');
             console.log(res)

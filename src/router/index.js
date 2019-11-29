@@ -2,8 +2,20 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-const routes = [
-
+const routes = [{
+        path: "/xiang",
+        component: () =>
+            import ('../views/xiang')
+    },
+    {
+        path: "/base",
+        component: () =>
+            import ('../views/base')
+    },
+    {
+        path: "*",
+        redirect: "/xiang"
+    }
 ]
 
 const router = new VueRouter({

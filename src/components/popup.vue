@@ -16,6 +16,7 @@ export default {
     methods:{
          login(id){
              localStorage.setItem('id',id);
+             console.log(id)
              this.$router.push('/xiang')
          }
     }

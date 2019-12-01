@@ -8,6 +8,18 @@ const routes = [
         component:()=> import ('../views/Home/home.vue')
     },
     {
+        path:'/swiper',
+        component:()=> import ('../views/swiper/swiper.vue')
+    },
+    {
+        path:'/allcolor',
+        component:()=> import ('../views/swiper/allColor/allcolor.vue')
+    },
+    {
+        path:'/cartype',
+        component:()=> import ('../views/swiper/carType/cartype.vue')
+    },
+    {
         path:'*',
         redirect:'/home'
     }

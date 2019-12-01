@@ -3,7 +3,7 @@
       <div class="title">可向多个商家咨询最低价,商家及时回复</div>
       <div class="main" ref="main" @scroll="scroll">
         <!-- -------------------------------------------------------- -->
-        <div class="box">
+        <div class="box" @click="$router.push('/share')">
           <div class="left">
             <img src="../assets/logo.png" alt="">
           </div>
@@ -25,7 +25,7 @@
             <span>手机</span>
             <span>15135351744</span>
           </p>
-          <p>
+          <p @click="$router.push('/share')">
             <span>城市</span>
             <span>北京</span>
             <span class="cityj">&gt;</span>

@@ -17,91 +17,48 @@
         </li>
       </ul>
     </div>
-    <Popup v-show="flag" :carlist="carlist"></Popup>
+    <Popup v-show="flag" @change='change' :carid="carid"></Popup>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import Popup from "../../components/popup";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
        list: [],
-      carlist: [],
+     carid:'',
       flag: false
     };
   },
+  name:'home',
   components: {
     Popup
   },
   computed: {
-    // ...mapState({
-    //   list: state => state.home.list
-    // })
+  
+    ...mapState({
+      lists: state => state.home.list
+    })
   },
   methods: {
-    async block(id) {
-      this.flag = true;
-      let res = await axios.get(
-        `https://baojia.chelun.com/v2-car-getMakeListByMasterBrandId.html?MasterID=${id}`
-      );
-      this.carlist = res.data.data;
-      console.log(this.carlist);
+      change(mes){
+      this.flag = mes
     },
-     async getlist(){
-                let res = await axios.get('https://baojia.chelun.com/v2-car-getMasterBrandList.html');
-                console.log(res)
-                res.data.data.forEach((item,index) => {
-                    item.title = item.Spelling.slice(0,1);
-                });
-
-                let data2 = [];
-                res.data.data.filter(item => {
-                    if(data2.findIndex(val => item.title == val.title) == -1){
-                        data2.push({
-                            title : item.title
-                        });
-                    }
-                });
-
-                data2.forEach((item,index)=>{
-                    item.data = res.data.data.filter(val=> val.Spelling.slice(0,1) == item.title)
-                });
-                console.log(data2);
-                this.list = data2
-                    // this.list.forEach((item,index) => {
-                    // item.title = item.Spelling.slice(0,1);
-                    // });
-
-                    // let data2 = [];
-                    // this.list.filter(item => {
-                    //     if(data2.findIndex(val => item.title == val.title) == -1){
-                    //         data2.push({
-                    //             title : item.title
-                    //         });
-                    //     }
-                    // });
-
-                    // data2.forEach((item,index)=>{
-                    //     item.data = this.list.filter(val=> val.Spelling.slice(0,1) == item.title)
-                    // });
-                    // console.log(data2);
-                    // this.list = data2
-            },
-    
-
-    ...mapActions({
+    //弹窗
+    block(MasterID){
+      this.flag = true,
+      this.carid = MasterID;
+    },
+    // ----------------------------------------------
+  ...mapActions({
       getMasterBrandList: "home/getMasterBrandList"
     })
   },
-  created() {
-     this.getlist()
-    console.log("$store>>>>", this.$store);
-    this.getMasterBrandList();
-    console.log(this.list)
-    
+  async created() {
+    await this.getMasterBrandList();
+    this.list = this.lists;  
   }
 }
 </script>
@@ -110,14 +67,15 @@ export default {
 .home {
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 .home .block {
   width: 100%;
-  overflow: hidden;
 }
 .home .block p {
   width: 100%;
   height: 30px;
+  line-height: 30px;
   padding-left: 20px;
   background: #ccc;
 }
@@ -135,10 +93,12 @@ export default {
 .home .block ul li img {
   width: 44.16px;
   height: 44.16px;
+  margin-top: 5px;
 }
 .home .block ul li span {
   display: inline-block;
   margin-left: 20px;
+  line-height: 50px;
 }
 .home .box {
   position: fixed;

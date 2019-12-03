@@ -1,69 +1,106 @@
 <template>
 <!-- 弹窗组件 -->
     <div class="popup">
-        <div class="box" v-for="(item,index) in carlist" :key="index">
+       <div class="left" @click="close"></div>
+       <div class="right">
+            <div class="box" v-for="(item,index) in list" :key="index">
             <P>{{item.GroupName}}</P>
             <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val.SerialID)">
                 <li><img :src="val.Picture" v-lazy="val.Picture" alt=""> <span><h4>{{val.AliasName}}</h4> <p>{{val.DealerPrice}}</p></span></li>
             </div>
         </div>
+       </div>
     </div>
 </template>
 
 <script>
+import {mapState,mapActions} from 'vuex'
 export default {
-    props:['carlist'],
+    data(){
+        return {
+            list:[]
+        }
+    },
+    props:['carlist','flag','carid'],
+    computed:{
+        ...mapState({
+            lists:state => state.carlist.list
+        })
+    },
+    name:'carlist',
     methods:{
+        close(){
+          this.$emit('change',false)
+        },
          login(id){
              localStorage.setItem('id',id);
              console.log(id)
              this.$router.push('/xiang')
-         }
+         },
+         ...mapActions({
+             getMakeListByMasterBrandId:'carlist/getMakeListByMasterBrandId'
+         })
+    },
+    async created(){
+        await this.getMakeListByMasterBrandId(this.carid)
+        this.list = this.lists
+        console.log(this.lists);
+        
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .popup{
+    width:100%;
+    display: flex;
     position: fixed;
     top:0;
     right:0;
-    width: 75%;
     height:100%;
-    background:white;
-    overflow-y: auto;
+    overflow: hidden;
+    .left{
+        flex:1;
+        background: rgba(0,0,0,0.5);
+    }
+    .right{
+        flex: 3;
+        background: #fff;
+        overflow: auto;
+    }
 }
-.popup .box{
+.right .box{
     width: 100%;
 }
-.popup .box>p{
+.right .box>p{
     width: 100%;
     height:30px;
+    line-height: 30px;
     padding-left: 20px;
     background: #ccc;
 }
-.popup .box .ul{
+.right .box .ul{
     width: 100%;
 }
-.popup .box .ul li{
+.right .box .ul li{
     width: 100%;
     height:69px;
     display: flex;
     padding: 0 18px;
     border-bottom: solid 1px #ccc;
 }
-.popup .box .ul li img{
+.right .box .ul li img{
     width: 99.36px;
     height: 66.23px;
 }
-.popup .box .ul li span{
+.right .box .ul li span{
     display: inline-block;
     margin-left:20px;
 }
-.popup .box .ul li span h4{
+.right .box .ul li span h4{
     margin: 5px 0;
 }
-.popup .box .ul li span p{
+.right .box .ul li span p{
     color:red;
 }
 </style>

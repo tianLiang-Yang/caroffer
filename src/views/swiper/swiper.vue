@@ -4,25 +4,9 @@
             <p @click="$router.push('/allcolor')">全部颜色 ↓</p>
             <p @click="$router.push('/cartype')">全部车款 ↓</p>
         </div>
-        <div class="content">
-            <div class="img">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-                <img src="http://dummyimage.com/135x150" alt="">
-            </div>
-        </div>
+        <ul class="content">
+            <li  v-for="(item,index) in list" :key="index"><img :src="item.video_pic" alt=""></li>
+        </ul>
     </div>
 </template>
 
@@ -31,12 +15,13 @@ import axios from 'axios'
 export default {
     data(){
         return {
-
+            list:[]
         }
     },
     created(){
-        axios.get(`https://baojia.chelun.com/v2-car-getModelImageYearColor.html?SerialID=${2593}`).then(res=>{
-            console.log(res)
+        axios.get(`https://baojia.chelun.com/v2-car-getInfoAndListById.html?SerialID=${2593}`).then(res=>{
+            this.list = res.data
+            console.log(this.list)
         })
     }
 }
@@ -63,17 +48,21 @@ export default {
 .swiper .header p:nth-child(1){
     border-right:solid 1px #ccc;
 }
-.swiper .content{
-     flex:1;
+.swiper ul{
+    flex:1;
     width: 100%;
-    overflow: auto;
-}
-.swiper .content .img{
     display: flex;
     flex-wrap: wrap;
 }
-.swiper .content .img img{
+.swiper ul li{
+    width: 135px;
+    height:150px;
     margin-top: 2px;
     margin-right: 3px;
+}
+.swiper ul li img{
+    width: 100%;
+    height:100%;
+    
 }
 </style>

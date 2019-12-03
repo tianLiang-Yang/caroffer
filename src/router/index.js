@@ -16,10 +16,6 @@ const routes = [{
         path: "/share",
         component: () =>
             import ('../views/share')
-    },
-    {
-        path: "*",
-        redirect: "/xiang"
     }
 ]
 

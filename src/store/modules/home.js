@@ -7,6 +7,7 @@ const state = {
 const mutations = {
     updateList(state,payload){
           state.list = payload
+          console.log(state.list)
     }
 }
 

@@ -2,7 +2,10 @@
      <div class="allcolor">
         <div class="header" @click="$router.go(-1)">全部颜色</div>
         <div class="year">2019</div>
-        <div class="block"></div>
+        <ul class="block">
+            <li><span></span>阿格斯棕</li>
+            <li><span></span>朱鹭白</li>
+        </ul>
      </div>
 </template>
 
@@ -34,9 +37,27 @@ export default {
     padding-left: 20px;
     color:skyblue;
     font-size: 18px;
+    margin-bottom: 10px;
 }
 .allcolor .block{
     width: 100%;
     background:white;
+    display: flex;
+    flex-wrap: wrap;
+}
+.allcolor .block li{
+    width: 190.44px;
+    height:39px;
+    padding: 0 10px;
+    line-height: 49px;
+     margin:10px 8px;
+    border:solid 1px #09f;
+}
+.allcolor .block li span{
+    display:inline-block;
+    width: 22.08px;
+    height: 22.08px;
+    margin:0 10px;
+    background:rgba(70, 44, 44, 0.8);
 }
 </style>

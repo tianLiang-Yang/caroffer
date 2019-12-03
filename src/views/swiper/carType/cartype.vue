@@ -5,7 +5,8 @@
         <div class="content">
             <p>看达到搜索</p>
             <div class="block">
-                
+                <p><b>1616166116</b> <span>20.98万起</span></p>
+                <p></p>
             </div>
         </div>
     </div>
@@ -46,6 +47,8 @@ export default {
 }
 .cartype .content p{
     width: 100%;
+    font-size: 16px;
+    padding-left: 20px;
 }
 .cartype .content .block{
     width: 100%;

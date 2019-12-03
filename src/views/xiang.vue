@@ -2,86 +2,65 @@
   <div class="xiang">
     <div class="div">
       <div class="header">
-        <img :src="list.CoverPhoto" alt />
+        <img :src="lists.CoverPhoto" alt />
       </div>
       <!--询问底价 -------------------------------------------- -->
       <div class="cont">
         <div class="left">
-          <p>{{list.market_attribute.dealer_price}}</p>
-          <p>指导价 {{list.market_attribute.official_refer_price}}</p>
+          <p>{{lists.market_attribute.dealer_price}}</p>
+          <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
         </div>
         <div class="right" @click="$router.push('/base')">询问底价</div>
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
         <span>全部</span>
-        <span>{{year}}</span>
+        <span>{{years}}</span>
       </div>
-      <!-- ------------------------------------------------- -->
-      <div class="content" v-for="(item,index) in list.list" :key="index">
-        <p class="text">{{item.exhaust_str}}/{{item.max_power_str}}{{item.inhale_type}}</p>
-        <div class="box">
-          <p>{{item.market_attribute.year}}款{{item.car_name}}</p>
-          <p>{{item.horse_power}}马力{{item.gear_num}}档{{item.trans_type}}</p>
-          <p>
-            <span>指导价{{item.market_attribute.official_refer_price}}</span>
-            <span>{{item.market_attribute.dealer_price_min}}</span>
-          </p>
-          <p @click="$router.push('/base')">询问底价</p>
-        </div>
-      </div>
+      <!-- 列表 ------------------------------------------------- -->
+      <List :lists="lists"/>
       <!-- ------------------------------------------- -->
       <div class="footer" @click="$router.push('/base')">
-        <p>{{list.BottomEntranceTitle}}</p>
+        <p>{{lists.BottomEntranceTitle}}</p>
         <p>本地经销商</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import List from '../components/list/list';
 import { mapState, mapActions } from "vuex";
-import { getInfoAndListById } from "../services/xiang";
 export default {
-  name: "xiang",
-  data() {
-    return {
-      list: {
-        CoverPhoto: "",
-        market_attribute: { dealer_price: "" },
-      },
-      year:""
-    };
+  components:{
+    List
   },
-  // computed: {
-  //   ...mapState({
-  //     list: state => state.xiang.list
-  //   })
-  // },
+  data(){
+    return {
+      lists:{},
+      years:'',
+      lists:{
+        market_attribute:{dealer_price:''}
+      }
+  }
+  },
+  name: "xiang",
+  computed: {
+    ...mapState({
+      list: state => state.xiang.list,
+      year: state => state.xiang.year
+    })
+  },
   methods: {
     ...mapActions({
       getInfoAndListById: "xiang/getInfoAndListById"
-    }),
-    async getlist(SerialID) {
-      // let res = await axios.get(
-      //   "https://baojia.chelun.com/v2-car-getInfoAndListById.html",
-      //   { params: { SerialID } }
-      // );
-      // console.log(getInfoAndListById)
-      let res =await getInfoAndListById({ SerialID });
-      console.log(res)
-      if (res.data.code === 1) {
-        this.list = res.data.data;
-        console.log(res.data.data);
-        this.year = this.list.list[0].market_attribute.year;
-      }
-    }
+    })
   },
-  mounted() {
-    // let SerialID = localStorage.getItem('SerialID');
-    // let SerialID = 2593;
-    // this.getlist(SerialID);
-    this.getlist(2593);
-    console.log(this.list);
+  async created() {
+   await this.getInfoAndListById(2593);
+    this.lists=this.list;
+    this.years=this.year;
+    console.log(this.lists);
+    
   }
 };
 </script>
@@ -121,6 +100,7 @@ export default {
   }
   .left p:last-child {
     font-size: 14px;
+    line-height: 30px;
     color: #ccc;
   }
   .right {
@@ -148,47 +128,7 @@ export default {
   color: rgb(99, 169, 248);
 }
 
-.content {
-  width: 100%;
-  .text {
-    padding: 0 10px;
-    color: #888;
-    background: #eee8e8;
-  }
-}
-.box {
-  width: 100%;
-  background: #fff;
-}
-.box p:first-child {
-  font-size: 18px;
-  line-height: 40px;
-  padding: 0 10px;
-}
-.box p:nth-child(2) {
-  color: #ccc;
-  font-size: 14px;
-  padding: 0 10px;
-}
-.box p:nth-child(3) {
-  text-align: right;
-  font-size: 13px;
-  color: #888;
-  padding: 0 10px;
-  line-height: 30px;
-}
-.box p:nth-child(3) span:last-child {
-  color: red;
-  font-size: 18px;
-  margin-left: 10px;
-}
-.box p:last-child {
-  line-height: 50px;
-  text-align: center;
-  color: rgb(99, 169, 248);
-  border-top: 1px solid #ccc;
-  font-size: 18px;
-}
+
 .footer {
   width: 100%;
   position: fixed;
@@ -204,6 +144,6 @@ export default {
 }
 .footer p:last-child {
   font-size: 13px;
-  padding-bottom: 10px;
+  line-height: 30px;
 }
 </style>

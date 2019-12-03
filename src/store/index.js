@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import xiang from './xiang'
+import xiang from './modules/xiang'
 import creareLogger from 'vuex/dist/logger';
 Vue.use(Vuex)
 

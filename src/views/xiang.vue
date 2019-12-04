@@ -1,5 +1,5 @@
 <template>
-  <div class="xiang">
+  <div class="xiang" v-if="Object.keys(lists).length">
     <div class="div">
       <div class="header">
         <img :src="lists.CoverPhoto" alt="" />
@@ -38,9 +38,7 @@ export default {
     return {
       // lists:{},
       years:'',
-      lists:{
-        market_attribute:{dealer_price:''}
-      }
+      lists:{ }
   }
   },
   name: "xiang",

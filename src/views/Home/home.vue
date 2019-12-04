@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- 汽车列表 -->
     <div class="block" v-for="(item,index) in list" :key="index">
       <p :id="item.title">{{item.title}}</p>
       <ul v-for="(val,key) in item.data" :key="key" @click="block(val.MasterID)">
@@ -9,6 +10,7 @@
         </li>
       </ul>
     </div>
+    <!-- 点击跳到相应列表 -->
     <div class="box">
       <p>#</p>
       <ul v-for="(item,index) in list" :key="index">
@@ -17,91 +19,47 @@
         </li>
       </ul>
     </div>
+    <!-- 弹窗组件 -->
     <Popup v-show="flag" :carlist="carlist"></Popup>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import Popup from "../../components/popup";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
        list: [],
-      carlist: [],
-      flag: false
+       carlist:[],
+       flag: false
     };
   },
   components: {
-    Popup
+     Popup
   },
   computed: {
-    // ...mapState({
-    //   list: state => state.home.list
-    // })
-  },
-  methods: {
-    async block(id) {
-      this.flag = true;
-      let res = await axios.get(
-        `https://baojia.chelun.com/v2-car-getMakeListByMasterBrandId.html?MasterID=${id}`
-      );
-      this.carlist = res.data.data;
-      console.log(this.carlist);
-    },
-     async getlist(){
-                let res = await axios.get('https://baojia.chelun.com/v2-car-getMasterBrandList.html');
-                console.log(res)
-                res.data.data.forEach((item,index) => {
-                    item.title = item.Spelling.slice(0,1);
-                });
-
-                let data2 = [];
-                res.data.data.filter(item => {
-                    if(data2.findIndex(val => item.title == val.title) == -1){
-                        data2.push({
-                            title : item.title
-                        });
-                    }
-                });
-
-                data2.forEach((item,index)=>{
-                    item.data = res.data.data.filter(val=> val.Spelling.slice(0,1) == item.title)
-                });
-                console.log(data2);
-                this.list = data2
-                    // this.list.forEach((item,index) => {
-                    // item.title = item.Spelling.slice(0,1);
-                    // });
-
-                    // let data2 = [];
-                    // this.list.filter(item => {
-                    //     if(data2.findIndex(val => item.title == val.title) == -1){
-                    //         data2.push({
-                    //             title : item.title
-                    //         });
-                    //     }
-                    // });
-
-                    // data2.forEach((item,index)=>{
-                    //     item.data = this.list.filter(val=> val.Spelling.slice(0,1) == item.title)
-                    // });
-                    // console.log(data2);
-                    // this.list = data2
-            },
-    
-
-    ...mapActions({
-      getMasterBrandList: "home/getMasterBrandList"
+    ...mapState({
+      lists: state => state.home.list,
+      carlists:state => state.popuplist.carList
     })
   },
-  created() {
-     this.getlist()
-    console.log("$store>>>>", this.$store);
-    this.getMasterBrandList();
-    console.log(this.list)
-    
+  methods: {
+    // 控制弹窗显示   传入数据
+    async block(id) {
+      this.flag = true;
+      await this.getPopupList(id);
+      this.carlist = this.carlists;
+      console.log(this.carlist);
+    },
+    ...mapActions({
+      getMasterBrandList: "home/getMasterBrandList",
+      getPopupList:"popuplist/getPopupList"
+    })
+  },
+  async created() {
+    await this.getMasterBrandList();
+    this.list = this.lists;
   }
 }
 </script>

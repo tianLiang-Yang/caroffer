@@ -2,7 +2,7 @@
   <div class="xiang">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" alt />
+        <img :src="lists.CoverPhoto" alt="" />
       </div>
       <!--询问底价 -------------------------------------------- -->
       <div class="cont">
@@ -36,7 +36,7 @@ export default {
   },
   data(){
     return {
-      lists:{},
+      // lists:{},
       years:'',
       lists:{
         market_attribute:{dealer_price:''}
@@ -51,12 +51,15 @@ export default {
     })
   },
   methods: {
+    tab(){
+       
+    },
     ...mapActions({
       getInfoAndListById: "xiang/getInfoAndListById"
     })
   },
   async created() {
-   await this.getInfoAndListById(2593);
+   await this.getInfoAndListById(this.$route.query.id);
     this.lists=this.list;
     this.years=this.year;
     console.log(this.lists);

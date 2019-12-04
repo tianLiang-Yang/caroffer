@@ -11,14 +11,15 @@
 </template>
 
 <script>
+// import { mapState, mapActions } from "vuex";
 export default {
     props:['carlist'],
     methods:{
-         login(id){
-             localStorage.setItem('id',id);
-             console.log(id)
-             this.$router.push('/xiang')
-         }
+        // 跳转详情  传参
+        login(id){
+            console.log(id)
+            this.$router.push({path:'/xiang',query:{id}})
+        }
     }
 }
 </script>

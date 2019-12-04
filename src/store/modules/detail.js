@@ -5,7 +5,7 @@ const state = {
     year: ''
 }
 const mutations = {
-    xianglist(state, payload) {
+    detaillist(state, payload) {
         state.list = payload
         state.year = payload.list[0].market_attribute.year
     }
@@ -13,7 +13,7 @@ const mutations = {
 const actions = {
     async getInfoAndListById({ commit }, payload) {
         let res = await getInfoAndListById(payload);
-        commit('xianglist', res.data)
+        commit('detaillist', res.data)
 
 
     }

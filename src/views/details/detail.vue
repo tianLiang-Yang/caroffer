@@ -1,5 +1,5 @@
 <template>
-  <div class="xiang">
+  <div class="detail">
     <div class="div">
       <div class="header">
         <img :src="lists.CoverPhoto" alt />
@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import List from '../components/list/list';
+import List from '../../components/list/list';
 import { mapState, mapActions } from "vuex";
 export default {
   components:{
@@ -43,7 +43,7 @@ export default {
       }
   }
   },
-  name: "xiang",
+  name: "detail",
   computed: {
     ...mapState({
       list: state => state.xiang.list,
@@ -52,11 +52,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      getInfoAndListById: "xiang/getInfoAndListById"
+      getInfoAndListById: "detail/getInfoAndListById"
     })
   },
   async created() {
-   await this.getInfoAndListById(2593);
+   await this.getInfoAndListById(this.$route.query.id);
     this.lists=this.list;
     this.years=this.year;
     console.log(this.lists);
@@ -66,7 +66,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.xiang,
+.detail,
 .div {
   width: 100%;
   height: 100%;

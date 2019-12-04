@@ -3,9 +3,9 @@
     <div class="popup">
        <div class="left" @click="close"></div>
        <div class="right">
-            <div class="box" v-for="(item,index) in list" :key="index">
+            <div class="box" v-for="(item,index) in carlist" :key="index">
             <P>{{item.GroupName}}</P>
-            <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val.SerialID)">
+            <div class="ul" v-for="(val,key) in item.GroupList" :key="key"  @click="$router.push({path:'/detail',query:{id:val.SerialID}})">
                 <li><img :src="val.Picture" v-lazy="val.Picture" alt=""> <span><h4>{{val.AliasName}}</h4> <p>{{val.DealerPrice}}</p></span></li>
             </div>
         </div>
@@ -21,30 +21,17 @@ export default {
             list:[]
         }
     },
-    props:['carlist','flag','carid'],
-    computed:{
-        ...mapState({
-            lists:state => state.carlist.list
-        })
-    },
+    props:['carlist','flag'],
+
     name:'carlist',
     methods:{
         close(){
-          this.$emit('change',false)
+          this.$emit('change',false);
         },
          login(id){
-             localStorage.setItem('id',id);
              console.log(id)
-             this.$router.push('/xiang')
+             this.$router.push({path:'/detail',query:{id}})
          },
-         ...mapActions({
-             getMakeListByMasterBrandId:'carlist/getMakeListByMasterBrandId'
-         })
-    },
-    async created(){
-        await this.getMakeListByMasterBrandId(this.carid)
-        this.list = this.lists
-        console.log(this.lists);
         
     }
 }

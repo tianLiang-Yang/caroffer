@@ -5,7 +5,7 @@ const state = {
 }
 
 const mutations = {
-    updateList(state, payload) {
+    upDateList(state, payload) {
         state.list = payload
     }
 }
@@ -13,8 +13,7 @@ const mutations = {
 const actions = {
     async getMakeListByMasterBrandId({ commit }, payload) {
         let res = await getMakeListByMasterBrandId(payload);
-        console.log(res.data);
-        commit('updateList', res.data)
+        commit('upDateList', res.data)
     }
 }
 export default {

@@ -1,108 +1,131 @@
 <template>
-  <div class="home">
-    <div class="block" v-for="(item,index) in list" :key="index">
-      <p :id="item.title">{{item.title}}</p>
-      <ul v-for="(val,key) in item.data" :key="key" @click="block(val.MasterID)">
-        <li>
-          <img :src="val.CoverPhoto" v-lazy="val.CoverPhoto" alt />
-          <span>{{val.Name}}</span>
-        </li>
-      </ul>
+  <div id="home">
+    <!-- 首页列表---------------------------------------------------------------- -->
+    <div id="content">
+      <div ref="row">
+       <List :list='list' v-for="(item,index) in list" :key="index" :block='block' :item="item"/>
+      </div>
     </div>
+    <!-- 右侧楼层按钮---------------------------------------------------------------- -->
     <div class="box">
       <p>#</p>
       <ul v-for="(item,index) in list" :key="index">
-        <li>
-          <a :href="'#'+item.title">{{item.title}}</a>
+        <li @click="changeindex(index)">
+          {{item.title}}
         </li>
       </ul>
     </div>
-    <Popup v-show="flag" @change='change' :carid="carid"></Popup>
+    <!-- 弹窗组件-------------------------------------------------------------------- -->
+    <Popup v-show="flag" @change="change" :carlist="carlist"></Popup>
   </div>
 </template>
 
 <script>
-import Popup from "../../components/popup";
+import List from '../../components/home/list';
+import Popup from "../../components/home/popup";
 import { mapState, mapActions } from "vuex";
+import BScroll from "better-scroll";
 export default {
   data() {
     return {
-       list: [],
-     carid:'',
-      flag: false
+      //首页数据
+      list: [],
+      //首页弹窗数据
+      carlist: [],
+      //控制弹窗显示隐藏
+      flag: false,
+      //默认下标
+      curIndex: 0,
+      //保存元素的高度
+      scrollH: [],
+      //声明实例变量
+      homeBScroll: null
     };
   },
-  name:'home',
+  name: "home",
   components: {
-    Popup
+    Popup,
+    List
   },
   computed: {
-  
     ...mapState({
-      lists: state => state.home.list
+      //首页列表仓库
+      lists: state => state.home.list,
+      //首页弹窗列表仓库
+      carlists: state => state.carlist.list
     })
   },
   methods: {
-      change(mes){
-      this.flag = mes
+    //先获取每一个Row的高度--------------------------------------------------
+    getHeight() {
+      let height = 0; //初始距离顶部高度为0
+      let children = this.$refs.row.children; //通过ref方法获取dom节点
+      this.scrollH.push(height);
+      for (let i = 0; i < children.length; i++) {
+        height += children[i].offsetHeight;
+        this.scrollH.push(height);
+      }
     },
-    //弹窗
-    block(MasterID){
-      this.flag = true,
-      this.carid = MasterID;
+    //实例化BScroll----------------------------------------------------------
+    init() {
+      this.homeBScroll = new BScroll("#content", {
+        click: true, //代表在滚动的时候可以点击事件是成立的
+        probeType: 3 //实时监听滚动事件
+      });
     },
-    // ----------------------------------------------
-  ...mapActions({
-      getMasterBrandList: "home/getMasterBrandList"
+    //点击右侧楼层------------------------------------------------------------
+    changeindex(index) {
+      this.curIndex = index;
+      let children = this.$refs.row.children;
+      this.homeBScroll.scrollToElement(children[index], 1000);
+    },
+    //弹窗--------------------------------------------------------------------
+    async block(MasterID) {
+      //调用首页弹窗渲染数据
+      await this.getMakeListByMasterBrandId(MasterID);
+      this.carlist = this.carlists;
+      this.flag = true;
+    },
+    //接收子组件传的值---------------------------------------------------------
+    change(mes) {
+      this.flag = mes;
+    },
+    //调用仓库方法--------------------------------------------------------------
+    ...mapActions({
+      //首页列表数据
+      getMasterBrandList: "home/getMasterBrandList",
+      //首页弹窗列表数据
+      getMakeListByMasterBrandId: "carlist/getMakeListByMasterBrandId"
     })
   },
+  //渲染首页数据----------------------------------------------------------------
   async created() {
     await this.getMasterBrandList();
-    this.list = this.lists;  
+    this.list = this.lists;
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.init();
+      this.getHeight();
+    });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.home {
+#content {
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
 }
-.home .block {
+#home {
   width: 100%;
+  height: 100%;
 }
-.home .block p {
-  width: 100%;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 20px;
-  background: #ccc;
-}
-.home .block ul {
-  width: 100%;
-}
-.home .block ul li {
-  width: 90%;
-  height: 50px;
-  line-height: 40px;
-  display: flex;
-  margin: 0 18px;
-  border-bottom: solid 1px #ccc;
-}
-.home .block ul li img {
-  width: 44.16px;
-  height: 44.16px;
-  margin-top: 5px;
-}
-.home .block ul li span {
-  display: inline-block;
-  margin-left: 20px;
-  line-height: 50px;
-}
-.home .box {
+#home .box {
   position: fixed;
-  top: 24%;
-  right: 5px;
+  top: 20%;
+  right: 15px;
+  text-align: center;
 }
 </style>

@@ -23,9 +23,9 @@ const routes = [{
             import ('../views/swiper/carType/cartype.vue')
     },
     {
-        path: "/xiang",
+        path: "/detail",
         component: () =>
-            import ('../views/xiang')
+            import ('../views/details/detail.vue')
     },
     {
         path: "/base",

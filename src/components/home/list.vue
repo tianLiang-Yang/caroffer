@@ -36,7 +36,7 @@ export default {
   line-height: 40px;
   display: flex;
   margin: 0 18px;
-  border-bottom: solid 1px #ccc;
+  border-bottom: solid 1px #888;
 }
 .block ul li img {
   width: 44.16px;

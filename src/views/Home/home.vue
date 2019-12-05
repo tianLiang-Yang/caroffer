@@ -16,7 +16,9 @@
       </ul>
     </div>
     <!-- 弹窗组件-------------------------------------------------------------------- -->
+    <transition name="fade">
     <Popup v-show="flag" @change="change" :carlist="carlist"></Popup>
+     </transition>
   </div>
 </template>
 
@@ -28,10 +30,6 @@ import BScroll from "better-scroll";
 export default {
   data() {
     return {
-      //首页数据
-      list: [],
-      //首页弹窗数据
-      carlist: [],
       //控制弹窗显示隐藏
       flag: false,
       //默认下标
@@ -50,9 +48,9 @@ export default {
   computed: {
     ...mapState({
       //首页列表仓库
-      lists: state => state.home.list,
+      list: state => state.home.list,
       //首页弹窗列表仓库
-      carlists: state => state.carlist.list
+      carlist: state => state.carlist.list
     })
   },
   methods: {
@@ -83,7 +81,6 @@ export default {
     async block(MasterID) {
       //调用首页弹窗渲染数据
       await this.getMakeListByMasterBrandId(MasterID);
-      this.carlist = this.carlists;
       this.flag = true;
     },
     //接收子组件传的值---------------------------------------------------------
@@ -101,7 +98,6 @@ export default {
   //渲染首页数据----------------------------------------------------------------
   async created() {
     await this.getMasterBrandList();
-    this.list = this.lists;
   },
   mounted() {
     this.$nextTick(() => {
@@ -113,6 +109,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 #content {
   width: 100%;
   height: 100%;
@@ -121,6 +123,7 @@ export default {
 #home {
   width: 100%;
   height: 100%;
+  font-size: 14px;
 }
 #home .box {
   position: fixed;

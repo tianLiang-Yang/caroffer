@@ -5,7 +5,7 @@
        <div class="right">
             <div class="box" v-for="(item,index) in carlist" :key="index">
             <P>{{item.GroupName}}</P>
-            <div class="ul" v-for="(val,key) in item.GroupList" :key="key"  @click="$router.push({path:'/detail',query:{id:val.SerialID}})">
+            <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val.SerialID)">
                 <li><img :src="val.Picture" v-lazy="val.Picture" alt=""> <span><h4>{{val.AliasName}}</h4> <p>{{val.DealerPrice}}</p></span></li>
             </div>
         </div>
@@ -74,7 +74,7 @@ export default {
     height:69px;
     display: flex;
     padding: 0 18px;
-    border-bottom: solid 1px #ccc;
+    border-bottom: solid 1px #888;
 }
 .right .box .ul li img{
     width: 99.36px;
@@ -83,6 +83,7 @@ export default {
 .right .box .ul li span{
     display: inline-block;
     margin-left:20px;
+    margin-top: 10px;
 }
 .right .box .ul li span h4{
     margin: 5px 0;

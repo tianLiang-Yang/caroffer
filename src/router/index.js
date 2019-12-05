@@ -13,6 +13,11 @@ const routes = [{
             import ('../views/swiper/swiper.vue')
     },
     {
+        path: '/img',
+        component: () =>
+            import ('../views/img/img')
+    },
+    {
         path: '/allcolor',
         component: () =>
             import ('../views/swiper/allColor/allcolor.vue')

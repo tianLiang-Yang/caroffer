@@ -1,8 +1,9 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-if="Object.keys(lists).length">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" alt />
+        <img :src="lists.CoverPhoto" @click="$router.push('/img?serialId=' + this.SerialID);" />
+          <span class="imgCount">{{lists.pic_group_count}}张图片</span>
       </div>
       <!--询问底价 -------------------------------------------- -->
       <div class="cont">
@@ -14,11 +15,10 @@
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
-        <span>全部</span>
-        <span>{{years}}</span>
+        <span :class="{active: current==item}" @click="click(item)" v-for="(item,index) in years" :key="index">{{item}}</span>
       </div>
       <!-- 列表 ------------------------------------------------- -->
-      <List :lists="lists"/>
+      <List :lists="currentList"/>
       <!-- ------------------------------------------- -->
       <div class="footer" @click="$router.push('/base')">
         <p>{{lists.BottomEntranceTitle}}</p>
@@ -29,38 +29,41 @@
 </template>
 <script>
 import List from '../../components/list/list';
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions,mapMutations } from "vuex";
 export default {
-  components:{
-    List
-  },
   data(){
     return {
-      lists:{},
-      years:'',
-      lists:{
-        market_attribute:{dealer_price:''}
-      }
-  }
+       SerialID:''
+    }
+  },
+  components:{
+    List
   },
   name: "detail",
   computed: {
     ...mapState({
-      list: state => state.xiang.list,
-      year: state => state.xiang.year
+      lists: state => state.detail.list,
+      years: state => state.detail.year,
+      current:state=>state.detail.current,
+      currentList:state=>state.detail.currentList
     })
   },
   methods: {
+    click(item){
+      this.setCurrent(item);
+    },
+...mapMutations({
+    setCurrent:"detail/setCurrent"
+}),
     ...mapActions({
       getInfoAndListById: "detail/getInfoAndListById"
     })
   },
   async created() {
    await this.getInfoAndListById(this.$route.query.id);
-    this.lists=this.list;
-    this.years=this.year;
-    console.log(this.lists);
-    
+  },
+  mounted () {
+     this.SerialID = this.$route.query.id;
   }
 };
 </script>
@@ -85,6 +88,15 @@ export default {
     left: 0;
     top: -48px;
   }
+   .imgCount{
+     position: absolute;
+     background:rgba(0,0,0,0.5);
+     right:20px;
+     bottom:20px;
+     border-radius: 10px;
+     color:#fff;
+     padding:5px;
+}
 }
 .cont {
   width: 100%;
@@ -108,8 +120,9 @@ export default {
     position: absolute;
     top: 22px;
     right: 10px;
+    font-size: 16px;
     text-align: center;
-    padding: 10px 70px;
+    padding: 10px 60px;
     border-radius: 10px;
     background: rgb(99, 169, 248);
   }
@@ -124,10 +137,9 @@ export default {
     padding: 0 15px;
   }
 }
-.title span:first-child {
-  color: rgb(99, 169, 248);
+.active{
+  color:rgb(99, 169, 248);
 }
-
 
 .footer {
   width: 100%;

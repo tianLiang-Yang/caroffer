@@ -1,13 +1,13 @@
 <template>
   <div class="list">
-        <div class="content" v-for="(item,index) in lists.list" :key="index">
-        <p class="text">{{item.exhaust_str}}/{{item.max_power_str}}{{item.inhale_type}}</p>
-        <div class="box">
-          <p>{{item.market_attribute.year}}款{{item.car_name}}</p>
-          <p>{{item.horse_power}}马力{{item.gear_num}}档{{item.trans_type}}</p>
+        <div class="content" v-for="(item,index) in lists" :key="index">
+        <div class="box" v-for="(val,ind) in item.list" :key="ind">
+           <p class="text">{{item.key}}</p>
+          <p>{{val.market_attribute.year}}款{{val.car_name}}</p>
+          <p>{{val.horse_power}}马力{{val.gear_num}}档{{val.trans_type}}</p>
           <p>
-            <span>指导价{{item.market_attribute.official_refer_price}}</span>
-            <span>{{item.market_attribute.dealer_price_min}}</span>
+            <span>指导价{{val.market_attribute.official_refer_price}}</span>
+            <span>{{val.market_attribute.dealer_price_min}}</span>
           </p>
           <p @click="$router.push('/base')">询问底价</p>
         </div>
@@ -17,42 +17,48 @@
 
 <script>
 export default {
-    props:['lists']
+    props:['lists'],
+    created(){
+      console.log(this.lists)
+    }
 }
 </script>
 
 <style scoped lang='scss'>
  .content {
   width: 100%;
-  .text {
-    padding: 0 10px;
-    color: #888;
-    background: #eee8e8;
-  }
+   background: #eee8e8;
 }
 
 .box {
   width: 100%;
   background: #fff;
 }
-.box p:first-child {
+.box .text {
+    padding: 0 10px;
+    color: #888;
+    font-size: 14px;
+    line-height: 20px;
+    background: #eee8e8;
+  }
+.box p:nth-child(2) {
   font-size: 18px;
   line-height: 40px;
   padding: 0 10px;
 }
-.box p:nth-child(2) {
+.box p:nth-child(3) {
   color: #ccc;
   font-size: 14px;
   padding: 0 10px;
 }
-.box p:nth-child(3) {
+.box p:nth-child(4) {
   text-align: right;
   font-size: 13px;
   color: #888;
   padding: 0 10px;
   line-height: 30px;
 }
-.box p:nth-child(3) span:last-child {
+.box p:nth-child(4) span:last-child {
   color: red;
   font-size: 18px;
   margin-left: 10px;
@@ -61,7 +67,7 @@ export default {
   line-height: 50px;
   text-align: center;
   color: rgb(99, 169, 248);
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #888;
   font-size: 18px;
 }
 </style>

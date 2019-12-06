@@ -1,42 +1,31 @@
 <template>
   <div class="list">
-        <div class="content" v-for="(item,index) of currentList" :key="index">
-          <p class="text">{{item.key}}</p>
-          <div class="box" v-for="(item1,index1) in item.list" :key="index1">
-            
-            <p>{{item1.market_attribute.year}}款{{item1.car_name}}</p>
-            <p>{{item1.horse_power}}马力{{item1.gear_num}}档{{item1.trans_type}}</p>
-            <p>
-              <span>指导价{{item1.market_attribute.official_refer_price}}</span>
-              <span>{{item1.market_attribute.dealer_price_min}}</span>
-            </p>
-            <p @click="$router.push('/base')">询问底价</p>
-          </div>
-        </div>
+    <div class="content" v-for="(item,index) of list" :key="index">
+      <div class="box" v-for="(val,ind) in item.list" :key="ind">
+        <p class="text">{{item.key}}</p>
+        <p>{{val.market_attribute.year}}款{{val.car_name}}</p>
+        <p>{{val.horse_power}}马力{{val.gear_num}}档{{val.trans_type}}</p>
+        <p>
+          <span>指导价{{val.market_attribute.official_refer_price}}</span>
+          <span>{{val.market_attribute.dealer_price_min}}</span>
+        </p>
+        <p @click="$router.push('/base')">询问底价</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-    // props:['currentList'],
-    computed: {
-    ...mapState({
-      currentList: state => state.xiang.currentList,
-    }),}
- }
+  props: ["list"]
+};
 </script>
 
 <style scoped lang='scss'>
- .content {
+.content {
   width: 100%;
-  font-size: 14px;
-  background:#eee8e8;
-  .text {
-    padding: 0 10px;
-    color: #888;
-    background: #eee8e8;
-  }
+  background: #eee8e8;
 }
 
 .box {
@@ -44,24 +33,31 @@ export default {
   background: #fff;
   margin-bottom: 10px;
 }
-.box p:first-child {
-  font-size: 15px;
+.box .text {
+  padding: 0 10px;
+  color: #888;
+  font-size: 14px;
+  line-height: 20px;
+  background: #eee8e8;
+}
+.box p:nth-child(2) {
+  font-size: 18px;
   line-height: 40px;
   padding: 0 10px;
 }
-.box p:nth-child(2) {
+.box p:nth-child(3) {
   color: #ccc;
   font-size: 14px;
   padding: 0 10px;
 }
-.box p:nth-child(3) {
+.box p:nth-child(4) {
   text-align: right;
   font-size: 13px;
   color: #888;
   padding: 0 10px;
   line-height: 30px;
 }
-.box p:nth-child(3) span:last-child {
+.box p:nth-child(4) span:last-child {
   color: red;
   font-size: 14px;
   margin-left: 10px;
@@ -70,8 +66,8 @@ export default {
   line-height: 50px;
   text-align: center;
   color: rgb(99, 169, 248);
-  border-top: 1px solid #ccc;
-  font-size: 14px;
+  border-top: 1px solid #888;
+  font-size: 18px;
 }
 
 </style>

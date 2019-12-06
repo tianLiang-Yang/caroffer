@@ -13,6 +13,16 @@ const routes = [{
             import ('../views/swiper/swiper.vue')
     },
     {
+        path: '/img',
+        component: () =>
+            import ('../views/img/img')
+    },
+    {
+        path: "/color",
+        component: () =>
+            import ('../views/img/color')
+    },
+    {
         path: '/allcolor',
         component: () =>
             import ('../views/swiper/allColor/allcolor.vue')
@@ -24,15 +34,18 @@ const routes = [{
     },
     {
         path: "/detail",
-        component: () =>import ('../views/detail')
+        component: () =>
+            import ('../views/details/detail.vue')
     },
     {
         path: "/base",
-        component: () =>import ('../views/base')
+        component: () =>
+            import ('../views/base')
     },
     {
         path: "/share",
-        component: () =>import ('../views/share')
+        component: () =>
+            import ('../views/share')
     },
     {
         path: '*',

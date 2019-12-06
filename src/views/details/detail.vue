@@ -2,8 +2,8 @@
   <div class="detail" v-if="Object.keys(lists).length">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" @click="$router.push('/img?serialId=' + this.SerialID);" />
-          <span class="imgCount">{{lists.pic_group_count}}张图片</span>
+        <img :src="lists.CoverPhoto" @click="$router.push({path:'/img',query:{id:SerialID}})"/>
+        <span class="imgCount">{{lists.pic_group_count}}张图片</span>
       </div>
       <!--询问底价 -------------------------------------------- -->
       <div class="cont">
@@ -15,10 +15,15 @@
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
-        <span :class="{active: current==item}" @click="click(item)" v-for="(item,index) in years" :key="index">{{item}}</span>
+        <span
+          :class="{active: curIndex==index}"
+          @click="click(index,item)"
+          v-for="(item,index) in years"
+          :key="index"
+        >{{item}}</span>
       </div>
       <!-- 列表 ------------------------------------------------- -->
-      <List :lists="currentList"/>
+      <List :list="currentList" />
       <!-- ------------------------------------------- -->
       <div class="footer" @click="$router.push('/base')">
         <p>{{lists.BottomEntranceTitle}}</p>
@@ -28,15 +33,16 @@
   </div>
 </template>
 <script>
-import List from '../../components/list/list';
-import { mapState, mapActions,mapMutations } from "vuex";
+import List from "../../components/list/list";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
-  data(){
+  data() {
     return {
-       SerialID:''
-    }
+      SerialID: this.$route.query.id,
+      curIndex: 0
+    };
   },
-  components:{
+  components: {
     List
   },
   name: "detail",
@@ -44,26 +50,24 @@ export default {
     ...mapState({
       lists: state => state.detail.list,
       years: state => state.detail.year,
-      current:state=>state.detail.current,
-      currentList:state=>state.detail.currentList
+      current: state => state.detail.current,
+      currentList: state => state.detail.currentList
     })
   },
   methods: {
-    click(item){
+    ...mapMutations({
+      setCurrent: "detail/setCurrent"
+    }),
+    click(index, item) {
+      this.curIndex = index;
       this.setCurrent(item);
     },
-...mapMutations({
-    setCurrent:"detail/setCurrent"
-}),
     ...mapActions({
       getInfoAndListById: "detail/getInfoAndListById"
     })
   },
   async created() {
-   await this.getInfoAndListById(this.$route.query.id);
-  },
-  mounted () {
-     this.SerialID = this.$route.query.id;
+    await this.getInfoAndListById(this.$route.query.id);
   }
 };
 </script>
@@ -88,15 +92,15 @@ export default {
     left: 0;
     top: -48px;
   }
-   .imgCount{
-     position: absolute;
-     background:rgba(0,0,0,0.5);
-     right:20px;
-     bottom:20px;
-     border-radius: 10px;
-     color:#fff;
-     padding:5px;
-}
+  .imgCount {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    right: 20px;
+    bottom: 20px;
+    border-radius: 10px;
+    color: #fff;
+    padding: 5px;
+  }
 }
 .cont {
   width: 100%;
@@ -137,8 +141,8 @@ export default {
     padding: 0 15px;
   }
 }
-.active{
-  color:rgb(99, 169, 248);
+.active {
+  color: rgb(99, 169, 248);
 }
 
 .footer {

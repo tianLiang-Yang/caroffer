@@ -1,33 +1,30 @@
 <template>
   <div class="list">
-        <div class="content" v-for="(item,index) in lists" :key="index">
-        <div class="box" v-for="(val,ind) in item.list" :key="ind">
-           <p class="text">{{item.key}}</p>
-          <p>{{val.market_attribute.year}}款{{val.car_name}}</p>
-          <p>{{val.horse_power}}马力{{val.gear_num}}档{{val.trans_type}}</p>
-          <p>
-            <span>指导价{{val.market_attribute.official_refer_price}}</span>
-            <span>{{val.market_attribute.dealer_price_min}}</span>
-          </p>
-          <p @click="$router.push('/base')">询问底价</p>
-        </div>
+    <div class="content" v-for="(item,index) of list" :key="index">
+      <div class="box" v-for="(val,ind) in item.list" :key="ind">
+        <p class="text">{{item.key}}</p>
+        <p>{{val.market_attribute.year}}款{{val.car_name}}</p>
+        <p>{{val.horse_power}}马力{{val.gear_num}}档{{val.trans_type}}</p>
+        <p>
+          <span>指导价{{val.market_attribute.official_refer_price}}</span>
+          <span>{{val.market_attribute.dealer_price_min}}</span>
+        </p>
+        <p @click="$router.push('/base')">询问底价</p>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-    props:['lists'],
-    created(){
-      console.log(this.lists)
-    }
-}
+  props: ["list"]
+};
 </script>
 
 <style scoped lang='scss'>
- .content {
+.content {
   width: 100%;
-   background: #eee8e8;
+  background: #eee8e8;
 }
 
 .box {
@@ -35,12 +32,12 @@ export default {
   background: #fff;
 }
 .box .text {
-    padding: 0 10px;
-    color: #888;
-    font-size: 14px;
-    line-height: 20px;
-    background: #eee8e8;
-  }
+  padding: 0 10px;
+  color: #888;
+  font-size: 14px;
+  line-height: 20px;
+  background: #eee8e8;
+}
 .box p:nth-child(2) {
   font-size: 18px;
   line-height: 40px;

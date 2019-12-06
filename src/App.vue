@@ -15,6 +15,13 @@
 html,body,#app{
   width: 100%;
   height:100%;
+  
+}
+html{
+    font-size: calc(100vw / 750 * 100);
+}
+body{
+  font-size: 14px;
 }
 a{
   color:#888;

@@ -1,29 +1,37 @@
 <template>
   <div class="list">
-        <div class="content" v-for="(item,index) in lists.list" :key="index">
-        <p class="text">{{item.exhaust_str}}/{{item.max_power_str}}{{item.inhale_type}}</p>
-        <div class="box">
-          <p>{{item.market_attribute.year}}款{{item.car_name}}</p>
-          <p>{{item.horse_power}}马力{{item.gear_num}}档{{item.trans_type}}</p>
-          <p>
-            <span>指导价{{item.market_attribute.official_refer_price}}</span>
-            <span>{{item.market_attribute.dealer_price_min}}</span>
-          </p>
-          <p @click="$router.push('/base')">询问底价</p>
+        <div class="content" v-for="(item,index) of currentList" :key="index">
+          <p class="text">{{item.key}}</p>
+          <div class="box" v-for="(item1,index1) in item.list" :key="index1">
+            
+            <p>{{item1.market_attribute.year}}款{{item1.car_name}}</p>
+            <p>{{item1.horse_power}}马力{{item1.gear_num}}档{{item1.trans_type}}</p>
+            <p>
+              <span>指导价{{item1.market_attribute.official_refer_price}}</span>
+              <span>{{item1.market_attribute.dealer_price_min}}</span>
+            </p>
+            <p @click="$router.push('/base')">询问底价</p>
+          </div>
         </div>
-      </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
-    props:['lists']
-}
+    // props:['currentList'],
+    computed: {
+    ...mapState({
+      currentList: state => state.xiang.currentList,
+    }),}
+ }
 </script>
 
 <style scoped lang='scss'>
  .content {
   width: 100%;
+  font-size: 14px;
+  background:#eee8e8;
   .text {
     padding: 0 10px;
     color: #888;
@@ -34,9 +42,10 @@ export default {
 .box {
   width: 100%;
   background: #fff;
+  margin-bottom: 10px;
 }
 .box p:first-child {
-  font-size: 18px;
+  font-size: 15px;
   line-height: 40px;
   padding: 0 10px;
 }
@@ -54,7 +63,7 @@ export default {
 }
 .box p:nth-child(3) span:last-child {
   color: red;
-  font-size: 18px;
+  font-size: 14px;
   margin-left: 10px;
 }
 .box p:last-child {
@@ -62,6 +71,7 @@ export default {
   text-align: center;
   color: rgb(99, 169, 248);
   border-top: 1px solid #ccc;
-  font-size: 18px;
+  font-size: 14px;
 }
+
 </style>

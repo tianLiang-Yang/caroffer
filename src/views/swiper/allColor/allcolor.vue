@@ -20,6 +20,7 @@ export default {
     width: 100%;
     height:100%;
     background:#eee;
+    font-size: 14px;
 }
 .allcolor .header{
     width: 100%;

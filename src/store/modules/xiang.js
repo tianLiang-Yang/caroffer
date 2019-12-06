@@ -45,45 +45,59 @@ function formatCarList(list){
                 key:item.key,
                 list:[item]
             })
+            // newList.map(item => item.key.concat([...new Set(item.key)]))
         }
     })
     return newList;
 }
 
+// 判断数据排序
+function isList(data){
+    state.list = data
+        // 处理数据
+        // 1.拿到年份
+        state.year = ['全部'];
+        let year = data.list.map(item => item.market_attribute.year);
+        state.year = state.year.concat([...new Set(year)]);
+
+        // 2.拿到当前选择年份的数据
+        let currentList = [];
+        if(state.current == '全部'){
+            currentList = data.list
+        }else{
+            currentList = data.list.filter(item => item.market_attribute.year === state.current);
+        }
+
+        // 3.给当前年份数据排序
+        currentList = sortCarList(currentList);
+
+        // 4.聚合key相同的车款数据
+        currentList = formatCarList(currentList);
+        state.currentList = currentList;
+}
 
 // 定义一个 mutations 的方法
 const mutations = {
     xianglist(state, payload) {
-        if(payload.code == 1){
-            state.desclist = payload.data
-            // 处理数据
-            // 1.拿到年份
-            let year = payload.data.list.map(item => item.market_attribute.year);
-            state.year = state.year.concat([...new Set(year)]);
-
-            // 2.拿到当前选择年份的数据
-            let currentList = [];
-            if(state.current == '全部'){
-                currentList = payload.data.list
-            }else{
-                currentList = payload.data.list.filter(item => item.market_attribute.year == state.current);
-            }
-
-            // 3.给当前年份数据排序
-            currentList = sortCarList(currentList);
-
-            // 4.聚合key相同的车款数据
-            currentList = formatCarList(currentList);
-            state.currentList = currentList
+        if(payload.code === 1){
+            // 判断排序数据
+            isList(payload.data)
         }else{
             alert(payload.msg)
         }
+    },
+    // 根据传参  改变当前年份 进项排序
+    setCurrent(state,payload){
+        state.current = payload;
+        isList(state.list)
     }
 }
+
 
 const actions = {
     async getInfoAndListById({ commit }, payload) {
         let res = await getInfoAndListById(payload);
+        console.log("res???",res)
         commit('xianglist', res)
 
 

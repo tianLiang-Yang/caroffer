@@ -23,19 +23,16 @@ const routes = [{
             import ('../views/swiper/carType/cartype.vue')
     },
     {
-        path: "/xiang",
-        component: () =>
-            import ('../views/xiang')
+        path: "/detail",
+        component: () =>import ('../views/detail')
     },
     {
         path: "/base",
-        component: () =>
-            import ('../views/base')
+        component: () =>import ('../views/base')
     },
     {
         path: "/share",
-        component: () =>
-            import ('../views/share')
+        component: () =>import ('../views/share')
     },
     {
         path: '*',

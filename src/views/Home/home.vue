@@ -112,6 +112,7 @@ export default {
 .home {
   width: 100%;
   height: 100%;
+  font-size: 14px;
 }
 .home #box{
   width: 100%;
@@ -119,7 +120,7 @@ export default {
   overflow: hidden;
 }
 .home .box{
-    font-size: 14px;
+    //font-size: 14px;
     width: 32.55px;
     height:422.13px;
     text-align: center;
@@ -127,6 +128,9 @@ export default {
     top: 50%;
     margin-top:-211.56px;
     right: 5px;
+}
+.home .box {
+  line-height: 20px;
 }
 
 </style>

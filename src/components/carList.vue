@@ -22,12 +22,14 @@ export default {
  .block {
   width: 100%;
   overflow: hidden;
+  font-size: 14px;
 }
  .block p {
   width: 100%;
-  height: 30px;
+  height: 22px;
+  line-height: 22px;
   padding-left: 20px;
-  background: #ccc;
+  background: #eee;
 }
  .block ul {
   width: 100%;

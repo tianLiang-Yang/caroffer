@@ -18,7 +18,7 @@ export default {
         // 跳转详情  传参
         login(id){
             console.log(id)
-            this.$router.push({path:'/xiang',query:{id}})
+            this.$router.push({path:'/detail',query:{id}})
         }
     }
 }
@@ -33,6 +33,7 @@ export default {
     height:100%;
     background:white;
     overflow-y: auto;
+    font-size: 14px;
 }
 .popup .box{
     width: 100%;
@@ -40,6 +41,7 @@ export default {
 .popup .box>p{
     width: 100%;
     height:30px;
+    line-height: 30px;
     padding-left: 20px;
     background: #ccc;
 }

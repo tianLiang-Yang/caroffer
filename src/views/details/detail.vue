@@ -2,7 +2,7 @@
   <div class="detail" v-if="Object.keys(lists).length">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" @click="$router.push({path:'/img',query:{id:SerialID}})"/>
+        <img :src="lists.CoverPhoto" @click="$router.push({path:'/swiper',query:{id:SerialID}})"/>
         <span class="imgCount">{{lists.pic_group_count}}张图片</span>
       </div>
       <!--询问底价 -------------------------------------------- -->

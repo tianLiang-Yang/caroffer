@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   props: ["list"]
 };
@@ -30,6 +31,7 @@ export default {
 .box {
   width: 100%;
   background: #fff;
+  margin-bottom: 10px;
 }
 .box .text {
   padding: 0 10px;
@@ -57,7 +59,7 @@ export default {
 }
 .box p:nth-child(4) span:last-child {
   color: red;
-  font-size: 18px;
+  font-size: 14px;
   margin-left: 10px;
 }
 .box p:last-child {
@@ -67,4 +69,5 @@ export default {
   border-top: 1px solid #888;
   font-size: 18px;
 }
+
 </style>

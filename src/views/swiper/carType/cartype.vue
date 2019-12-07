@@ -96,7 +96,7 @@ export default {
 }
 .content {
   width: 100%;
-  padding: 0 10px;
+  // padding: 0 10px;
   position: relative;
   background: #fff;
   font-size: 12px;
@@ -174,6 +174,7 @@ export default {
 }
 .right2{
     position: absolute;
+    margin-right: 10px;
     top:10px;
     right:3px;
     width: 100px;

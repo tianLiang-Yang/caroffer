@@ -1,7 +1,7 @@
 <template>
     <div class="swiper">
         <div class="header">
-            <p @click="$router.push('/allcolor')">全部颜色 ↓</p>
+            <p @click="$router.push({path:'/color',query:{id}})">全部颜色</p>
             <p @click="$router.push({path:'/cartype',query:{id : serialId}})">
                 {{this.type }}
             </p>
@@ -26,7 +26,8 @@ export default {
     data(){
         return {
             serialId:'',
-            type:'全部车款'
+            type:'全部车款',
+            id:this.$route.query.id
         }
     },
     computed: {

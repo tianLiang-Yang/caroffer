@@ -31,7 +31,6 @@ export default {
 .box {
   width: 100%;
   background: #fff;
-  margin-bottom: 10px;
 }
 .box .text {
   padding: 0 10px;

@@ -3,27 +3,25 @@
     <!-- 首页列表---------------------------------------------------------------- -->
     <div id="content">
       <div ref="row">
-       <List :list='list' v-for="(item,index) in list" :key="index" :block='block' :item="item"/>
+        <List :list="list" v-for="(item,index) in list" :key="index" :block="block" :item="item" />
       </div>
     </div>
     <!-- 右侧楼层按钮---------------------------------------------------------------- -->
     <div class="box">
       <p>#</p>
       <ul v-for="(item,index) in list" :key="index">
-        <li @click="changeindex(index)">
-          {{item.title}}
-        </li>
+        <li @click="changeindex(index)">{{item.title}}</li>
       </ul>
     </div>
     <!-- 弹窗组件-------------------------------------------------------------------- -->
     <transition name="fade">
-    <Popup v-show="flag" @change="change" :carlist="carlist"></Popup>
-     </transition>
+      <Popup v-show="flag" @change="change" :carlist="carlist"></Popup>
+    </transition>
   </div>
 </template>
 
 <script>
-import List from '../../components/home/list';
+import List from "../../components/home/list";
 import Popup from "../../components/home/popup";
 import { mapState, mapActions } from "vuex";
 import BScroll from "better-scroll";
@@ -109,10 +107,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 #content {
@@ -131,5 +131,4 @@ export default {
   right: 15px;
   text-align: center;
 }
-
 </style>

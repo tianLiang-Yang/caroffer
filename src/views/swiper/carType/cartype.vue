@@ -11,8 +11,10 @@
 
             <!-- 列表 ------------------------------------------------- -->
             <div class="cont" v-for="(item,index) of currentList" :key="index">
-                <p class="text">{{item.key}}</p>
-                <div class="box" v-for="(item1,index1) in item.list" :key="index1" @click="$router.push({path:'/swiper',query:{type:`${item1.market_attribute.year}款${item1.car_name}`}})">
+                <p class="text">
+                  {{item.key}}
+                </p>
+                <div class="box" v-for="(item1,index1) in item.list" :key="index1" @click="$router.push({path:'/swiper',query:{carid:list.serialId,type:`${item1.market_attribute.year}款${item1.car_name}`}})">
                     
                    <div class="left2">
                         <p>{{item1.market_attribute.year}}款{{item1.car_name}}</p>
@@ -43,10 +45,10 @@ export default {
     },
      computed: {
         ...mapState({
-        list: state => state.xiang.list,
-        year: state => state.xiang.year,
-        current : state => state.xiang.current,
-         currentList: state => state.xiang.currentList,
+          list: state => state.xiang.list,
+          year: state => state.xiang.year,
+          current : state => state.xiang.current,
+          currentList: state => state.xiang.currentList,
         }),
    
   },

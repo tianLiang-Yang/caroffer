@@ -3,10 +3,10 @@
         <div class="header">
             <p @click="$router.push({path:'/color',query:{id}})">全部颜色</p>
             <p @click="$router.push({path:'/cartype',query:{id : serialId}})">
-                {{this.type }}
+                {{this.type}}
             </p>
         </div>
-        <div class="content">
+        <div class="content" v-if="!this.$route.query.carid">
             <ul v-for="(item,index) in imgList" :key="index">
                 <div class="layer">
                     <p><span>{{item.Name}}</span> <span>{{item.Count}}张></span> </p>
@@ -15,6 +15,21 @@
                     <span src='' :style="{backgroundImage:'url('+item1.Url+')'}" @click="magnifyImg"></span>
                 </li>
             </ul>
+            
+        </div>
+        <div class="content" v-else-if="carTypeImg.length != 0">
+            <ul v-for="(item,index) in carTypeImg" :key="index">
+                <div class="layer">
+                    <p><span>{{item.Name}}</span> <span>{{item.Count}}张></span> </p>
+                </div>
+                <li v-for="(item1,index1) in item.List" :key="index1">
+                    <span src='' :style="{backgroundImage:'url('+item1.Url+')'}" @click="magnifyImg1"></span>
+                </li>
+            </ul>
+            
+        </div>
+        <div class="content" v-else>
+            <h1>暂时没有任何数据</h1>
             
         </div>
     </div>
@@ -32,29 +47,38 @@ export default {
     },
     computed: {
     ...mapState({
-      imgList: state => state.img.imgList
+      imgList: state => state.img.imgList,
+      carTypeImg:state => state.carTypeImg.imgList
     }),
     
   },
   methods: {
      ...mapActions({
-      getCarTypeImage:"img/getCarTypeImage"
-    }),
+        getCarTypeImage:"img/getCarTypeImage",
+        getCarTypeImage1:"carTypeImg/getCarTypeImage1"
+     }),
     ...mapMutations({
-        imgFlag:"img/imgFlag"
+        imgFlag:"img/imgFlag",
+        imgFlag1:"carTypeImg/imgFlag1"
     }),
     magnifyImg(){
         this.imgFlag()
+    },
+    magnifyImg1(){
+        this.imgFlag1()
     }
   },
   mounted(){
       this.serialId = this.$route.query.id
       this.getCarTypeImage(this.serialId)
+      
   },
   created(){
     //  await this.getCarTypeImage(this.$route.query.id)
-    // if(this.$route.query.type !== '')
-    // this.type = this.$route.query.type
+     if(this.$route.query.carid)
+       this.type = this.$route.query.type
+       this.getCarTypeImage1(this.$route.query.carid)
+      
      }
 }
 </script>
@@ -70,7 +94,6 @@ export default {
 .swiper .header{
     width: 100%;
     height:50px;
-    line-height: 40px;
     display: flex;
 }
 .swiper .header p{
@@ -121,5 +144,8 @@ export default {
     width: 100%;
     height:100%;
     background-position: center;
+}
+.swiper .content h1{
+    margin: 30px  40px;
 }
 </style>

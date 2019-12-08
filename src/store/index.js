@@ -8,6 +8,7 @@ import detail from './modules/detail'
 import home from './modules/home'
 import carlist from './modules/carlist'
 import color from './modules/color'
+import carTypeImg from './modules/carTypeImg'
 import creareLogger from 'vuex/dist/logger';
 Vue.use(Vuex)
 
@@ -20,7 +21,8 @@ export default new Vuex.Store({
         detail,
         home,
         carlist,
-        color
+        color,
+        carTypeImg
     },
     plugins: [creareLogger()]
 })

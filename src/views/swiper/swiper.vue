@@ -27,14 +27,14 @@ export default {
         return {
             serialId:'',
             type:'全部车款',
-            id:this.$route.query.id
+            id:this.$route.query.id,
+            ColorId:this.$route.query.ColorId
         }
     },
     computed: {
     ...mapState({
       imgList: state => state.img.imgList
     }),
-    
   },
   methods: {
      ...mapActions({
@@ -50,12 +50,10 @@ export default {
   mounted(){
       this.serialId = this.$route.query.id
       this.getCarTypeImage(this.serialId)
-  },
-  created(){
-    //  await this.getCarTypeImage(this.$route.query.id)
-    // if(this.$route.query.type !== '')
-    // this.type = this.$route.query.type
-     }
+      console.log('colorid-----',this.ColorId); 
+      console.log(this.imgList);
+      
+  }
 }
 </script>
 

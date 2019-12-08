@@ -11,7 +11,7 @@
             <p>{{list.market_attribute.dealer_price}}</p>
             <p>指导价 {{list.market_attribute.official_refer_price}}</p>
           </div>
-          <div class="right" @click="$router.push('/base')">询问底价</div>
+          <div class="right" @click="$router.push({path:'/base',query:{id:id}})">询问底价</div>
         </div>
         
         <!-- 年份 ----------------------------------------------- -->
@@ -43,19 +43,14 @@ export default {
   data(){
     return {
       id : this.$route.query.id,
-      // years:[],
-      // lists:[],
-      // currentL:[],
        curIndex:0 ,  //默认年份下标
-       //current:'全部'    //当前选择年份
     }
   },
   computed: {
     ...mapState({
       list: state => state.xiang.list,
       year: state => state.xiang.year,
-      current : state => state.xiang.current,
-      // currentList: state => state.xiang.currentList,
+      current : state => state.xiang.current
     }),
    
   },
@@ -74,6 +69,10 @@ export default {
   },
   async created() {
       await this.getInfoAndListById(this.$route.query.id);
+       
+  },
+  mounted(){
+       console.log(this.$route.query.id)
   }
 };
 </script>

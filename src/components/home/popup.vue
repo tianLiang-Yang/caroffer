@@ -16,11 +16,6 @@
 <script>
 import {mapState,mapActions} from 'vuex'
 export default {
-    data(){
-        return {
-            list:[]
-        }
-    },
     props:['carlist','flag'],
 
     name:'carlist',
@@ -29,9 +24,12 @@ export default {
           this.$emit('change',false);
         },
          login(id){
-             console.log(id)
+         
              this.$router.push({path:'/detail',query:{id}})
          },
+    },
+    mounted(){
+        console.log(this.carlist);
         
     }
 }

@@ -5,7 +5,7 @@
        <div class="right">
             <div class="box" v-for="(item,index) in carlist" :key="index">
             <P>{{item.GroupName}}</P>
-            <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val.SerialID)">
+            <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val)">
                 <li><img :src="val.Picture" v-lazy="val.Picture" alt=""> <span><h4>{{val.AliasName}}</h4> <p>{{val.DealerPrice}}</p></span></li>
             </div>
         </div>
@@ -28,9 +28,11 @@ export default {
         close(){
           this.$emit('change',false);
         },
-         login(id){
-             console.log(id)
-             this.$router.push({path:'/detail',query:{id}})
+         login(item){
+             console.log(item)
+             var item = JSON.stringify(item);
+             sessionStorage.setItem("item", item);
+             this.$router.push('/detail');
          },
         
     }

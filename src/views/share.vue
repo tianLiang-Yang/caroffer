@@ -1,30 +1,51 @@
 <template>
   <div class="cartype">
+     <p>自动定位</p>
      <div class="title">2019</div>
      <!-- ------------------------------------------ -->
+     <p>省市</p>
+     <!-- 省 -->
      <div class="content">
-         <p class="text">涡轮增压</p>
-         <div class="box">  
-            <div class="cont">
-              <p>北京中润发奥迪</p>
-              <p>北京市丰台区丽泽路99号</p>
-            </div>
-            <div class="city">
-              <p>
-                <span></span>
-                <span>万</span>
-              </p>
-              <p>售本市</p>
-            </div>
-         </div>
+         <p v-for="(item,index) in list" :key="index" @click="block">
+            <span class="sl">{{item.CityName}}</span>
+            <span class="sr">&gt;</span>
+         </p>
      </div>
      <!-- ------------------------------------------ -->
+     <!-- 市 -->
+     <AllCity v-show="flag" :flag="flag"></AllCity>
   </div>
 </template>
 
 <script>
+import AllCity from '../components/allCity'
+import {mapState,mapActions} from 'vuex'
 export default {
-
+    data(){
+        return {
+            flag:false
+        }
+      },
+      components:{
+          AllCity
+      },
+    computed:{
+        ...mapState({
+          list : state => state.share.list
+        })
+    },
+    methods: {
+      
+      ...mapActions({
+         getCityIdList:'share/getCityIdList'   
+      }),
+      block(){
+        this.flag = true
+      }
+    },
+     created() {
+         this.getCityIdList()
+    }
 }
 </script>
 
@@ -35,7 +56,15 @@ export default {
         background:  #eee8e8;
         display: flex;
         flex-direction: column;
-        overflow: auto;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+    .cartype>p{
+       width:100%;
+       height:20px;
+       line-height: 20px;
+       font-size: 12px;
+       padding:0 12px;
     }
     .title{
       width:100%;
@@ -48,40 +77,20 @@ export default {
     }
     .content{
       flex:1;
-    }
-    .text{
-      font-size: 13px;
-      padding:0 10px;
-    }
-    .box{
-      width:100%;
-      background: #fff;
-      display: flex;
-      padding:10px 15px;
-    }
-   
-    .cont{
-      flex:3;
-    }
-    .cont p:first-child{
-      font-size: 18px;
-    }
-    .cont p:last-child{
-      font-size: 13px;
-      color:#888;
-      line-height: 30px;
-    }
-    .city{
-      flex:1;
-      text-align: right;
-    }
-    .city p:first-child span{
-      color:red;
       font-size: 14px;
     }
-    .city p:last-child{
-      font-size: 13px;
-      color:#888;
-      line-height: 30px;
+    .content p{
+      width: 100%;
+      height:44.16px;
+      font-size: 14px;
+      padding:0 10px;
+      line-height: 44.16px;
+      background:white;
+      padding:0 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .content p .sr{
+      font-size: 16px;
     }
 </style>

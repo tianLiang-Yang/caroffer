@@ -1,41 +1,54 @@
-import {getCarTypeImage} from '@/services/index'
+import { getImageList, getYearColorList } from '@/services/index'
 
 const state = {
-    imgList : [],  //全部车系图片数据
-    EnlargementImgfalg: false,
-    carId:''   //选择的车款
+    imgList: [], //图片列表
+    colorId: "4216", // 车系颜色
+    carId: '', // 车款
+    yearData: {}, //汽车颜色年份数据
 }
 
 const mutations = {
-    updateImage(state,payload){
-        //   state.imgList = payload
-          console.log("payload>>>>",payload)
-          state.imgList = payload.map(item => {
-              item.List = item.List.map(val => {
-                  val.Url = val.Url.replace('{0}',3);
-                  return val
-              })
-              return item
-          })
+    getImgList(state, payload) {
+        state.imgList = payload.map((item, index) => { //由于数据中的图片url有问题 先给他处理一下
+            item.List = item.List.map((val, i) => {
+                val.Url = val.Url.replace('{0}', 3)
+                return val;
+            })
+            return item;
+        });
     },
-    imgFlag(){
-        state.EnlargementImgfalg = true;
+    getYear(state, payload) {
+        state.yearData = payload;
     },
-    setCarId(state,payload){
-
+    setColorId(state, payload) {
+        state.colorId = payload;
+    },
+    setCarId(state, payload) {
+        state.carId = payload;
     }
 }
 
 const actions = {
-     async getCarTypeImage({commit},payload){
-         let res= await getCarTypeImage(payload);
-         console.log("res>>>",res.data)
-         commit('updateImage', res.data);
-     }
+    async getImageList({ commit, state }, payload) {
+        let params = { SerialID: payload };
+        if (state.CarId) { //如果车款有值
+            params.CarId = state.carId;
+        }
+        if (state.ColorID) { //如果车系有值
+            params.ColorID = state.colorId;
+        }
+        let res = await getImageList(params)
+        commit('getImgList', res.data)
+    },
+
+    async getYearColorList({ commit }, payload) {
+        let res = await getYearColorList(payload)
+        commit('getYear', res.data)
+    }
 }
 
 export default {
-    namespaced:true,
+    namespaced: true,
     state,
     mutations,
     actions

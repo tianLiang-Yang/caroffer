@@ -1,20 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import xiang from './modules/xiang'
+// import xiang from './modules/xiang'
 // import home from './modules/home'
 import popuplist from './modules/popuplist'
 import img from './modules/img'
 import detail from './modules/detail'
 import home from './modules/home'
 import carlist from './modules/carlist'
-import color from './modules/color'
-import carTypeImg from './modules/carTypeImg'
+import color from './modules/color'                                                                                        
+import base from './modules/base'
+import share from './modules/share'
 import creareLogger from 'vuex/dist/logger';
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
-        xiang,
+        // xiang,
         // home,
         popuplist,
         img,
@@ -22,7 +23,8 @@ export default new Vuex.Store({
         home,
         carlist,
         color,
-        carTypeImg
+        base,
+        share
     },
     plugins: [creareLogger()]
 })

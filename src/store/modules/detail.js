@@ -90,8 +90,6 @@ const actions = {
     async getInfoAndListById({ commit }, payload) {
         let res = await getInfoAndListById(payload);
         commit('detaillist', res)
-        console.log(res);
-
     }
 }
 export default {

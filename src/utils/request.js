@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import Vant from 'vant';
 //创建axios实例
 const instance = axios.create({
         baseURL: 'https://baojia.chelun.com',
@@ -17,7 +17,7 @@ instance.interceptors.response.use(function(response) {
     if (response.status == 200) {
         return response.data;
     } else {
-        this.$notify({
+        Vant.$notify({
             type: 'warning',
             message: response.text
         })

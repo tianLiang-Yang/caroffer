@@ -11,7 +11,7 @@
           <p>{{lists.market_attribute.dealer_price}}</p>
           <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
         </div>
-        <div class="right" @click="$router.push('/base')">询问底价</div>
+        <div class="right" @click="$router.push({path:'/base'})">询问底价</div>
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
@@ -25,7 +25,7 @@
       <!-- 列表 ------------------------------------------------- -->
       <List :list="currentList" />
       <!-- ------------------------------------------- -->
-      <div class="footer" @click="$router.push('/base')">
+      <div class="footer" @click="$router.push({path:'/base'})">
         <p>{{lists.BottomEntranceTitle}}</p>
         <p>本地经销商</p>
       </div>
@@ -66,7 +66,7 @@ export default {
       getInfoAndListById: "detail/getInfoAndListById"
     })
   },
-  async created() {
+  async created() {  
     await this.getInfoAndListById(this.$route.query.id);
   }
 };

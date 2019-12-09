@@ -24,13 +24,8 @@ export default {
           this.$emit('change',false);
         },
          login(id){
-         
              this.$router.push({path:'/detail',query:{id}})
-         },
-    },
-    mounted(){
-        console.log(this.carlist);
-        
+         }
     }
 }
 </script>

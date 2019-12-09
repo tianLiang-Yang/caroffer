@@ -4,12 +4,14 @@
     <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
       <div class="box" @click="$router.push('/share')">
-        <div class="left">
-          <img src="../assets/logo.png" alt />
+        <div class="left" v-if="Object.keys(list).length">
+          <img :src="list.details.serial.Picture" />
         </div>
         <div class="right">
-          <p>奥迪A4</p>
-          <p>2019款阿斯顿阿斯顿撒奥迪</p>
+          <p v-if="Object.keys(list).length">{{list.details.serial.AliasName}}</p>
+          <p
+            v-if="Object.keys(list).length"
+          >{{list.details.market_attribute.year}}款{{list.details.car_name}}</p>
           <div class="jian">&gt;</div>
         </div>
       </div>
@@ -25,9 +27,9 @@
           <span>手机</span>
           <span>15135351744</span>
         </p>
-        <p @click="$router.push('/share')">
+        <p>
           <span>城市</span>
-          <span>北京</span>
+          <span @click="click">{{location.CityName}}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -60,29 +62,62 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
       show: false
     };
   },
+  computed: {
+    ...mapState({
+      list: state => state.base.list,
+      location: state => state.base.location,
+        currentList: state => state.detail.currentList
+    })
+  },
   methods: {
+    click(){
+      this.flag = true
+    },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
       } else {
         this.show = false;
       }
-    }
+    },
+    ...mapActions({
+      //首页弹窗列表数据
+      getDealerList: "base/getDealerList",
+      getCityId: "base/getCityId"
+    })
   },
-  created(){
-    console.log(this.$route.query.id);
+  async created() {
+    await this.getCityId();
+    let params={}
+     if (!this.$route.query.car_id) {
+      params={
+        cityId: this.location.CityID,
+        carId: data.list[0].car_id
+      }
+    } else {
+       params = {
+        cityId: this.location.CityID,
+        carId: this.$route.query.car_id
+      };
+    }
     
+    
+
+    await this.getDealerList(params);
+    console.log(this.list);
   }
 };
 </script>
 
 <style lang='scss' scoped>
+
 .base {
   width: 100%;
   height: 100%;
@@ -92,11 +127,12 @@ export default {
 }
 .title {
   width: 100%;
-  height: 35px;
+  height: 30px;
   background: rgb(124, 223, 124);
   color: #fff;
+  font-size: 16px;
   text-align: center;
-  line-height: 35px;
+  line-height: 30px;
 }
 .main {
   width: 100%;
@@ -124,11 +160,12 @@ export default {
   }
 }
 .right p:first-child {
-  font-size: 20px;
-  line-height: 40px;
+  font-size: 16px;
+  line-height: 30px;
 }
-.right p:last-child {
-  font-size: 18px;
+.right p:nth-child(2) {
+  font-size: 16px;
+  line-height: 30px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -143,7 +180,7 @@ export default {
 }
 .details {
   font-size: 13px;
-  line-height: 30px;
+  line-height: 25px;
   padding: 0 10px;
 }
 .message {
@@ -171,6 +208,7 @@ export default {
   background: rgb(99, 169, 248);
   padding: 10px 30px;
   color: #fff;
+  font-size: 16px;
   text-align: center;
   border-radius: 5px;
   margin: 15px 30px 0;

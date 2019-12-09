@@ -29,7 +29,7 @@
         </p>
         <p>
           <span>城市</span>
-          <span @click="click">{{location.CityName}}</span>
+          <span>{{location.CityName}}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -38,20 +38,20 @@
       <p ref="pp" class="details">选择报价经销商</p>
       <!-- -------------------------------------------------------- -->
       <div class="dealer">
-        <div class="content">
+        <div class="content" v-for="(item,index) in list.list" :key="index">
           <div class="ipt">
             <input type="checkbox" />
           </div>
           <div class="cont">
-            <p>北京中润发奥迪</p>
-            <p>北京市丰台区丽泽路99号</p>
+            <p>{{item.dealerShortName}}</p>
+            <p>{{item.address}}</p>
           </div>
           <div class="city">
             <p>
               <span></span>
               <span>万</span>
             </p>
-            <p>售本市</p>
+            <p>售{{item.saleRange}}</p>
           </div>
         </div>
       </div>
@@ -73,13 +73,10 @@ export default {
     ...mapState({
       list: state => state.base.list,
       location: state => state.base.location,
-        currentList: state => state.detail.currentList
+      currentList: state => state.detail.currentList
     })
   },
   methods: {
-    click(){
-      this.flag = true
-    },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
@@ -95,29 +92,27 @@ export default {
   },
   async created() {
     await this.getCityId();
-    let params={}
-     if (!this.$route.query.car_id) {
-      params={
+    let params = {};
+    if (!this.$route.query.car_id) {
+      params = {
         cityId: this.location.CityID,
-        carId: data.list[0].car_id
-      }
+        carId: this.currentList[0].list[0].car_id
+      };
     } else {
-       params = {
+      params = {
         cityId: this.location.CityID,
         carId: this.$route.query.car_id
       };
     }
+  
     
-    
-
     await this.getDealerList(params);
-    console.log(this.list);
+    console.log(this.currentList);
   }
 };
 </script>
 
 <style lang='scss' scoped>
-
 .base {
   width: 100%;
   height: 100%;
@@ -266,5 +261,6 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
+  font-size: 16px;
 }
 </style>

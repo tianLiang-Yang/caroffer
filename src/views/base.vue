@@ -1,17 +1,15 @@
 <template>
-  <div class="base">
+  <div class="base" v-if="Object.keys(list).length">
     <div class="title">可向多个商家咨询最低价,商家及时回复</div>
     <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
-      <div class="box" @click="$router.push('/share')">
-        <div class="left" v-if="Object.keys(list).length">
+      <div class="box" @click="share">
+        <div class="left">
           <img :src="list.details.serial.Picture" />
         </div>
         <div class="right">
-          <p v-if="Object.keys(list).length">{{list.details.serial.AliasName}}</p>
-          <p
-            v-if="Object.keys(list).length"
-          >{{list.details.market_attribute.year}}款{{list.details.car_name}}</p>
+          <p>{{list.details.serial.AliasName}}</p>
+          <p>{{list.details.market_attribute.year}}款{{list.details.car_name}}</p>
           <div class="jian">&gt;</div>
         </div>
       </div>
@@ -58,16 +56,27 @@
       <!-- --------------------------------------------------------------- -->
       <div class="btn" v-show="show">询最低价</div>
     </div>
+     <transition name="slide-fade">
+      <div v-show="flag" class="animation">
+       <Share :currentList="currentList" @change="change"/>
+      </div>
+    </transition>
+    
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
+import Share from '../components/detail/share';
 export default {
   data() {
     return {
-      show: false
+      show: false,
+      flag:false
     };
+  },
+  components:{
+    Share
   },
   computed: {
     ...mapState({
@@ -77,6 +86,12 @@ export default {
     })
   },
   methods: {
+    change(flag){
+      this.flag = flag;
+    },
+    share(){
+      this.flag = true
+    },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
@@ -104,8 +119,6 @@ export default {
         carId: this.$route.query.car_id
       };
     }
-  
-    
     await this.getDealerList(params);
     console.log(this.currentList);
   }
@@ -113,6 +126,22 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+.slide-fade-enter,
+.silde-fade-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: transform 0.5s linear;
+}
 .base {
   width: 100%;
   height: 100%;
@@ -152,6 +181,7 @@ export default {
   .right {
     flex: 4;
     position: relative;
+    overflow: hidden;
   }
 }
 .right p:first-child {
@@ -215,12 +245,14 @@ export default {
 }
 .content {
   width: 100%;
-  border-top: 1px solid #ccc;
   display: flex;
-  padding: 20px 0;
+  border-bottom: 1px solid #888;
+  padding:10px 0px;
   .ipt {
     width: 5%;
     input {
+      width:10px;
+      height:20px;
       margin-top: 20px;
     }
   }
@@ -241,6 +273,7 @@ export default {
 }
 .cont p:last-child {
   font-size: 14px;
+  line-height: 20px;
   color: #ccc;
 }
 .city p:first-child span:last-child {

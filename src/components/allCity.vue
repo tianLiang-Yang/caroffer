@@ -1,16 +1,29 @@
 <template>
    <div class="allCity" v-show="flag" @click="none">
-       <div class="block"></div>
+       <div class="block">
+           <!-- $router.push({path:'/base',query:{name:item.CityName,cityid:item.CityID}} -->
+           <p v-for="(item,index) in city" :key="index" @click="set(item)">
+               {{item.CityName}}
+            </p>
+       </div>
    </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
-    props:['flag'],
+    props:['none','flag','city'],
     methods:{
-        none(){
-            this.flag = false
+        ...mapActions({
+            setClick : 'base/setClick'
+        }),
+        set(item){
+            this.setClick({name:item.CityName,cityid:item.CityID});
+            
         }
+    },
+    created(){
+        
     }
 }
 </script>
@@ -32,4 +45,15 @@ export default {
     right:0;
     background:white;
 }
+.allCity .block p{
+      width: 100%;
+      height:44.16px;
+      font-size: 14px;
+      padding:0 10px;
+      line-height: 44.16px;
+      background:white;
+      padding:0 15px;
+      display: flex;
+      justify-content: space-between;
+    }
 </style>

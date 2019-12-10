@@ -11,7 +11,7 @@
           <p>{{lists.market_attribute.dealer_price}}</p>
           <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
         </div>
-        <div class="right" @click="$router.push({path:'/base',query:{carId:lists.list.car_id}})">询问底价</div>
+        <div class="right" @click="$router.push({path:'/base',query:{data:currentList[0].list[0].car_id}})">询问底价</div>
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">

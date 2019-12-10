@@ -1,7 +1,7 @@
 <template>
-  <div class="cartype">
+  <div class="cartype" v-show="flag">
      <p>自动定位</p>
-     <div class="title">{{this.$route.query.city}}</div>
+     <div class="title">{{this.cityName}}</div>
      <!-- ------------------------------------------ -->
      <p>省市</p>
      <!-- 省 -->
@@ -18,9 +18,10 @@
 </template>
 
 <script>
-import AllCity from '../components/allCity'
+import AllCity from './allCity'
 import {mapState,mapActions} from 'vuex'
 export default {
+    props:['cityName'],
     data(){
         return {
             flag:false
@@ -64,6 +65,9 @@ export default {
         flex-direction: column;
         overflow-y: auto;
         box-sizing: border-box;
+        position: fixed;
+        top:0;
+        left:0;
     }
     .cartype>p{
        width:100%;

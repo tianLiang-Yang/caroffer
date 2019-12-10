@@ -1,14 +1,14 @@
 <template>
-  <div class="base">
+  <div class="base" v-if="list">
     <div class="title">可向多个商家咨询最低价,商家及时回复</div>
     <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
-      <div class="box" @click="$router.push({path:'/share',query:{id:this.location.CityID}})">
+      <div class="box" @click="$router.push({path:'/share',query:{id:location.CityID}})">
         <div class="left">
-          <img :src="this.list.Picture" alt />
+          <img :src="list.Picture" alt />
         </div>
         <div class="right">
-          <p>{{this.list.AliasName}}</p>
+          <p>{{list.AliasName}}</p>
           <p>{{this.$route.query.type}}</p>
           <div class="jian">&gt;</div>
         </div>
@@ -19,15 +19,16 @@
       <div class="message">
         <p>
           <span>姓名</span>
-          <span>阿斯顿</span>
+          <span><input type="text" placeholder="请输入姓名"></span>
         </p>
         <p>
           <span>手机</span>
-          <span>15135351744</span>
+          <span><input type="text" placeholder="请输入手机号"></span>
         </p>
-        <p @click="$router.push({path:'/share',query:{provinceid:lists.CityId}})">
+        <!-- $router.push({path:'/share',query:{city:location.CityName}}) -->
+        <p @click="block">
           <span>城市</span>
-          <span>{{location.CityName}}</span>
+          <span>{{ name || location.CityName }}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -56,22 +57,32 @@
       <!-- --------------------------------------------------------------- -->
       <div class="btn" v-show="show">询最低价</div>
     </div>
+    <!-- 全国省市组件 -->
+    <Share v-show="flag" :cityName="location.CityName"></Share>
   </div>
 </template>
 
 <script>
+import Share from '../components/share'
 import {mapState,mapActions} from 'vuex'
 export default {
   data() {
     return {
-      list: this.$route.query.lists,
-      show: false
+      list: [],
+      show: false,
+      flag:false,
+      
     };
+  },
+  components:{
+      Share
   },
   computed:{
       ...mapState({
         lists:state => state.base.list,
-        location:state => state.base.location
+        location:state => state.base.location,
+        name:state => state.base.name,
+        cityid:state => state.base.cityid
       })
   },
   methods: {
@@ -86,27 +97,35 @@ export default {
       } else {
         this.show = false;
       }
+    },
+    block(){
+      this.flag = true;
     }
   },
   async created() {
-    console.log(this.location)
+    sessionStorage.setItem('id',this.$route.query.carId)
+    
+     this.item = JSON.parse(sessionStorage.getItem("item"));
+     this.list = this.item
       await this.getCarId();
       let params = {};
       if(!this.$route.query.carId){
          params = {
-           cityId : this.location.CityID,
-           carId : data.list[0].car_id
+           cityId : this.$route.query.cityid,
+           carId : this.$route.query.data
          }
       }else{
+        this.carId = sessionStorage.getItem("id");
+        console.log(this.carId)
         params = {
-           cityId : this.location.CityID,
-           carId : this.$route.query.carId
+           cityId : this.cityid,
+           carId : this.carId
         }
       }
       
       await this.getIpAddress(params);
       console.log(params)
-  }
+   }
 };
 </script>
 
@@ -189,6 +208,9 @@ export default {
 }
 .message p:nth-child(3) {
   position: relative;
+}
+.message p input{
+  border:none;
 }
 .cityj {
   position: absolute;

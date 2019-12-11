@@ -83,7 +83,10 @@ export default {
     ...mapState({
       list: state => state.base.list,
       location: state => state.base.location,
-      currentList: state => state.detail.currentList
+      currentList: state => state.detail.currentList,
+       name:state => state.base.name,
+        cityid:state => state.base.cityid,
+        flag : state => state.base.flag
     })
   },
   methods: {
@@ -105,7 +108,11 @@ export default {
     ...mapActions({
       //首页弹窗列表数据
       getDealerList: "base/getDealerList",
-      getCityId: "base/getCityId"
+      getCityId: "base/getCityId",
+       getIpAddress : 'base/getIpAddress',
+        getCarId : 'base/getCarId',
+        getCityList : 'share/getCityList',
+        setFlag: 'base/setFlag' 
     })
   },
   async created() {

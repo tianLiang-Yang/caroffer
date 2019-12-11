@@ -1,6 +1,9 @@
 <template>
   <div class="list">
-    <div class="content" v-for="(item,index) of list" :key="index">
+    <div class="content"
+        v-for="(item,index) of list" 
+        :key="index"
+     >
       <div class="box" v-for="(val,ind) in item.list" :key="ind">
         <p class="text">{{item.key}}</p>
         <p>{{val.market_attribute.year}}款{{val.car_name}}</p>
@@ -18,7 +21,13 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["list"]
+  props: ["list","lists"],
+  computed:{
+     
+  },
+  created(){
+    
+  }
 };
 </script>
 

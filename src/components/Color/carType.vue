@@ -1,6 +1,6 @@
 <template>
     <div class="cartype">
-        <div class="header"  @click="$router.go(-1)">全部车款</div>
+        <div class="header"  @click="$emit('update:showCar',false)">全部车款</div>
         <div class="content">
             <!-- 年份 ----------------------------------------------- -->
             <div class="title">
@@ -35,6 +35,7 @@
 // import List from '../../../components/carType';
 import { mapState, mapActions, mapMutations } from "vuex";
 export default {
+    props:['SerialId'],
     data(){
         return {
             curIndex:0
@@ -65,9 +66,9 @@ export default {
       this.setCurrent(item);
     }
   },
-  async created() {
-      this.item = JSON.parse(sessionStorage.getItem("item"));
-      await this.getInfoAndListById(this.item.SerialID);
+   created() {
+       this.item = JSON.parse(sessionStorage.getItem("item"));
+       this.getInfoAndListById(this.item.SerialId);
   }
 };
 
@@ -79,6 +80,9 @@ export default {
     height:100%;
     background:#eee;
     font-size: 14px;
+    position: fixed;
+    top:0;
+    left:0;
 }
 .cartype .header{
     width: 100%;
@@ -166,12 +170,7 @@ export default {
   padding: 0 10px;
   margin-bottom: 6px;
 }
-// .box p:nth-child(3) {
-//   text-align: right;
-//   font-size: 13px;
-//   color: #888;
-//   padding: 0 10px;
-// }
+
 .left2{
     padding:10px 0px; 
 }

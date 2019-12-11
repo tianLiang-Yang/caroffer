@@ -1,6 +1,10 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
-import base from './modules/base'
+import Vuex from 'vuex' <<
+<< << < HEAD
+    ===
+    === =
+    import base from './modules/base' >>>
+    >>> > ytl
 import popuplist from './modules/popuplist'
 import img from './modules/img'
 import detail from './modules/detail'
@@ -13,7 +17,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
-
         base,
         popuplist,
         img,

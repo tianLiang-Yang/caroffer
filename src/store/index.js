@@ -1,10 +1,6 @@
 import Vue from 'vue'
-import Vuex from 'vuex' <<
-<< << < HEAD
-    ===
-    === =
-    import base from './modules/base' >>>
-    >>> > ytl
+import Vuex from 'vuex'
+import base from './modules/base'
 import popuplist from './modules/popuplist'
 import img from './modules/img'
 import detail from './modules/detail'

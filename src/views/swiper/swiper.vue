@@ -58,7 +58,8 @@ export default {
   methods: {
     //映射函数
     ...mapActions({
-      getImageList: "img/getImageList"
+      getImageList: "img/getImageList",
+      getCarTypeImage:"img/getCarTypeImage"
     }),
     setColor() {
       console.log('1111');
@@ -76,6 +77,7 @@ export default {
       console.log('colorid-----',this.ColorId); 
       console.log(this.imgList);
        this.getImageList(this.SerialID);
+       this.getCarTypeImage(this.SerialID);
       
   }
 }

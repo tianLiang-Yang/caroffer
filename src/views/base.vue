@@ -3,7 +3,7 @@
     <div class="title">可向多个商家咨询最低价,商家及时回复</div>
     <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
-      <div class="box" @click="share">
+      <div class="box">
         <div class="left">
           <img :src="list.details.serial.Picture" />
         </div>
@@ -25,7 +25,7 @@
           <span>手机</span>
           <input type="text" placeholder="请输入手机号">
         </p>
-        <p>
+        <p @click="block">
           <span>城市</span>
           <span>{{location.CityName}}</span>
           <span class="cityj">&gt;</span>
@@ -57,23 +57,22 @@
       <div class="btn" v-show="show">询最低价</div>
     </div>
      <transition name="slide-fade">
-      <div v-show="flag" class="animation">
-       <Share :currentList="currentList" @change="change"/>
-      </div>
+       
     </transition>
-    
+    <Share  v-show="flag" :cityName="location.cityName"></Share>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import Share from '../components/detail/share';
+import Share from '../components/share';
 export default {
   data() {
     return {
       show: false,
-      flag:false,
-      carid:''
+      // flag:false,
+      carid:'',
+      // lists:{}
     };
   },
   components:{
@@ -84,20 +83,17 @@ export default {
       list: state => state.base.list,
       location: state => state.base.location,
       currentList: state => state.detail.currentList,
-       name:state => state.base.name,
-        cityid:state => state.base.cityid,
-        flag : state => state.base.flag
+      name:state => state.base.name,
+      cityid:state => state.base.cityid,
+      flag : state => state.base.flag
     })
   },
   methods: {
-    change(obj){
-      this.flag = obj.flag;
-      console.log(obj.carid);
-      this.carid = obj.carid;
-    },
-    share(){
-      this.flag = true
-    },
+    // change(obj){
+    //   this.flag = obj.flag;
+    //   console.log(obj.carid);
+    //   this.carid = obj.carid;
+    // },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
@@ -109,14 +105,18 @@ export default {
       //首页弹窗列表数据
       getDealerList: "base/getDealerList",
       getCityId: "base/getCityId",
-       getIpAddress : 'base/getIpAddress',
-        getCarId : 'base/getCarId',
-        getCityList : 'share/getCityList',
-        setFlag: 'base/setFlag' 
-    })
+      getIpAddress : 'base/getIpAddress',
+      getCarId : 'base/getCarId',
+      getCityList : 'share/getCityList',
+      setFlag: 'base/setFlag' 
+    }),
+    block(){
+      this.setFlag(true) 
+    }
   },
   async created() {
-    await this.getCityId();
+    this.lists = this.$route.query.lists;
+    await this.getCarId();
     let params = {};
     if (!this.$route.query.car_id) {
       params = {
@@ -130,21 +130,12 @@ export default {
       };
     }
     console.log(params);
-    await this.getDealerList(params);
-    console.log(this.currentList);
+    await this.getIpAddress(params);
   }
 };
 </script>
 
 <style lang='scss' scoped>
-.animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-}
 .slide-fade-enter,
 .silde-fade-leave-to {
   transform: translate3d(0, 100%, 0);

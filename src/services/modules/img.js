@@ -4,6 +4,10 @@ export let getImageList = (params) => {
     return request(`/v2-car-getImageList.html`, { params })
 }
 
+export let getCarTypeImage = (params) => {
+    return request(`/v2-car-getImageList.html`, { params })
+}
+
 export let getYearColorList = (id) => {
     return request(`/v2-car-getModelImageYearColor.html?SerialID=${id}`)
 }

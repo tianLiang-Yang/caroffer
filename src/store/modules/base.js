@@ -1,7 +1,7 @@
 import { getIpAddress, getDealerList, getCityId, getCarId } from '@/services/index'
 
 const state = {
-    list: [],
+    list: {},
     location: 0,
     name: '',
     cityid: '',
@@ -14,6 +14,7 @@ const mutations = {
     },
     upgetIpAddress(state, payload) {
         state.list = payload
+        console.log(state.list)
     },
     upsetClick(state, payload) {
         state.name = payload.name;

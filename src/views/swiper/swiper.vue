@@ -16,12 +16,12 @@
         </div>
       </ul>
     </div>
-
+    <!-- 车系颜色组件 -->
     <transition name="scroll-top">
       <Color v-if="showColor" :SerialID="SerialID" :showColor.sync="showColor"></Color>
       
     </transition>
-    
+    <!-- 车系车款组件 -->
     <transition name="scroll-top-c">
       <Car v-if="showCar" :SerialID="SerialID" :showCar.sync="showCar"></Car>
     </transition>

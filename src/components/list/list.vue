@@ -1,15 +1,32 @@
 <template>
   <div class="list">
-    <div class="content" v-for="(item,index) of list" :key="index">
+    <div class="content"
+        v-for="(item,index) of list" 
+        :key="index"
+     >
       <div class="box" v-for="(val,ind) in item.list" :key="ind">
-        <p class="text">{{item.key}}</p>
-        <p>{{val.market_attribute.year}}款{{val.car_name}}</p>
-        <p>{{val.horse_power}}马力{{val.gear_num}}档{{val.trans_type}}</p>
-        <p>
-          <span>指导价{{val.market_attribute.official_refer_price}}</span>
-          <span>{{val.market_attribute.dealer_price_min}}</span>
-        </p>
-        <p @click="$router.push({path:'/base',query:{carId:val.car_id,type:`${val.market_attribute.year}款${val.car_name}`}})">询问底价</p>
+          <p class="text">
+              {{item.key}}
+          </p>
+          <p>
+              {{val.market_attribute.year}}款{{val.car_name}}
+          </p>
+          <p>
+              {{val.horse_power}}马力{{val.gear_num}}档{{val.trans_type}}
+          </p>
+          <p>
+              <span>
+                  指导价{{val.market_attribute.official_refer_price}}
+              </span>
+              <span>
+                  {{val.market_attribute.dealer_price_min}}
+              </span>
+          </p>
+          <p 
+              @click="$router.push({path:'/base',query:{carId:val.car_id,type:`${val.market_attribute.year}款${val.car_name}`}})"
+          >
+              询问底价
+          </p>
       </div>
     </div>
   </div>

@@ -4,13 +4,13 @@ const state = {
     list: [],
     location:0,
     name:'',
-    cityid:0
+    cityid:'',
+    flag:false
 }
 
 const mutations = {
     upgetCarId(state, payload) {
         state.location = payload
-        console.log(state.location)
     },
     upgetIpAddress(state,payload){
         state.list = payload
@@ -18,6 +18,10 @@ const mutations = {
     upsetClick(state,payload){
         state.name = payload.name;
         state.cityid = payload.cityid;
+        console.log(state.cityid)
+    },
+    upsetFlag(state,payload){
+        state.flag = payload
     }
 }
 
@@ -29,15 +33,16 @@ const actions = {
     },
     async getIpAddress({commit},payload){
         let res = await getIpAddress(payload);
-        console.log(res)
-        console.log("list<<",res)
+        console.log('res>>>',res)
         commit('upgetIpAddress',res.data)
     },
     async setClick({commit},payload){
         let res = await payload;
-        console.log(res)
-        console.log("set<<",res)
         commit('upsetClick',res)
+    },
+    async setFlag({commit},payload){
+        let res = await payload;
+        commit('upsetFlag',res)
     }
 }
 export default {

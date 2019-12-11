@@ -1,64 +1,64 @@
 <template>
   <div class="base" v-if="list">
-    <div class="title">可向多个商家咨询最低价,商家及时回复</div>
-    <div class="main" ref="main" @scroll="scroll">
+      <div class="title">可向多个商家咨询最低价,商家及时回复</div>
+      <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
-      <div class="box" @click="$router.push({path:'/share',query:{id:location.CityID}})">
-        <div class="left">
-          <img :src="list.Picture" alt />
-        </div>
-        <div class="right">
-          <p>{{list.AliasName}}</p>
-          <p>{{this.$route.query.type}}</p>
-          <div class="jian">&gt;</div>
-        </div>
-      </div>
-      <!-- -------------------------------------------------------- -->
-      <p class="details">个人信息</p>
-      <!-- ---------------------------------------------------------- -->
-      <div class="message">
-        <p>
-          <span>姓名</span>
-          <span><input type="text" placeholder="请输入姓名"></span>
-        </p>
-        <p>
-          <span>手机</span>
-          <span><input type="text" placeholder="请输入手机号"></span>
-        </p>
-        <!-- $router.push({path:'/share',query:{city:location.CityName}}) -->
-        <p @click="block">
-          <span>城市</span>
-          <span>{{ name || location.CityName }}</span>
-          <span class="cityj">&gt;</span>
-        </p>
-        <div class="floor">询最低价</div>
-      </div>
-      <!-- ---------------------------------------------------------- -->
-      <p ref="pp" class="details">选择报价经销商</p>
-      <!-- -------------------------------------------------------- -->
-      <div class="dealer">
-        <div class="content">
-          <div class="ipt">
-            <input type="checkbox" />
+          <div class="box" @click="$router.push({path:'/share',query:{id:location.CityID}})">
+              <div class="left">
+                  <img :src="list.Picture" alt />
+              </div>
+              <div class="right">
+                <p>{{list.AliasName}}</p>
+                <p>{{this.$route.query.type}}</p>
+                <div class="jian">&gt;</div>
+              </div>
           </div>
-          <div class="cont">
-            <p>北京中润发奥迪</p>
-            <p>北京市丰台区丽泽路99号</p>
-          </div>
-          <div class="city">
+          <!-- -------------------------------------------------------- -->
+          <p class="details">个人信息</p>
+          <!-- ---------------------------------------------------------- -->
+          <div class="message">
             <p>
-              <span></span>
-              <span>万</span>
+              <span>姓名</span>
+              <span><input type="text" placeholder="请输入姓名"></span>
             </p>
-            <p>售本市</p>
+            <p>
+              <span>手机</span>
+              <span><input type="text" placeholder="请输入手机号"></span>
+            </p>
+            <!-- $router.push({path:'/share',query:{city:location.CityName}}) -->
+            <p @click="block">
+              <span>城市</span>
+              <span>{{ name || location.CityName }}</span>
+              <span class="cityj">&gt;</span>
+            </p>
+            <div class="floor">询最低价</div>
           </div>
-        </div>
+          <!-- ---------------------------------------------------------- -->
+          <p ref="pp" class="details">选择报价经销商</p>
+          <!-- -------------------------------------------------------- -->
+          <div class="dealer">
+            <div class="content">
+              <div class="ipt">
+                <input type="checkbox" />
+              </div>
+              <div class="cont">
+                <p>北京中润发奥迪</p>
+                <p>北京市丰台区丽泽路99号</p>
+              </div>
+              <div class="city">
+                <p>
+                  <span></span>
+                  <span>万</span>
+                </p>
+                <p>售本市</p>
+              </div>
+            </div>
+          </div>
+          <!-- --------------------------------------------------------------- -->
+          <div class="btn" v-show="show">询最低价</div>
       </div>
-      <!-- --------------------------------------------------------------- -->
-      <div class="btn" v-show="show">询最低价</div>
-    </div>
-    <!-- 全国省市组件 -->
-    <Share v-show="flag" :cityName="location.CityName"></Share>
+      <!-- 全国省市组件 -->
+      <Share v-show="flag" :cityName="location.CityName"></Share>
   </div>
 </template>
 
@@ -69,8 +69,7 @@ export default {
   data() {
     return {
       list: [],
-      show: false,
-      flag:false,
+      show: false
       
     };
   },
@@ -82,14 +81,16 @@ export default {
         lists:state => state.base.list,
         location:state => state.base.location,
         name:state => state.base.name,
-        cityid:state => state.base.cityid
+        cityid:state => state.base.cityid,
+        flag : state => state.base.flag
       })
   },
   methods: {
     ...mapActions({
         getIpAddress : 'base/getIpAddress',
         getCarId : 'base/getCarId',
-        getCityList : 'share/getCityList'   
+        getCityList : 'share/getCityList',
+        setFlag: 'base/setFlag'   
     }),
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
@@ -99,32 +100,33 @@ export default {
       }
     },
     block(){
-      this.flag = true;
+        this.setFlag(true)
     }
   },
-  async created() {
+  mounted(){
+
+  },
+   created() {
     sessionStorage.setItem('id',this.$route.query.carId)
     
      this.item = JSON.parse(sessionStorage.getItem("item"));
      this.list = this.item
-      await this.getCarId();
-      let params = {};
-      if(!this.$route.query.carId){
+     this.getCarId();
+     let params = {};
+     if(!this.$route.query.carId){
          params = {
            cityId : this.$route.query.cityid,
            carId : this.$route.query.data
          }
       }else{
-        this.carId = sessionStorage.getItem("id");
-        console.log(this.carId)
         params = {
            cityId : this.cityid,
-           carId : this.carId
+           carId : this.$route.query.carId
         }
+        console.log(params)
       }
-      
-      await this.getIpAddress(params);
-      console.log(params)
+      this.getIpAddress(params);
+     
    }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="cartype" v-show="flag">
+  <div class="cartype">
      <p>自动定位</p>
      <div class="title">{{this.cityName}}</div>
      <!-- ------------------------------------------ -->
@@ -40,14 +40,16 @@ export default {
       
       ...mapActions({
          getCityIdList:'share/getCityIdList', 
-         getCity:'share/getCity'  
+         getCity:'share/getCity' ,
+         setFlag:'base/setFlag' 
       }),
       block(id){
         this.flag = true;
         this.getCity(id)
       },
       none(){
-        this.flag = false
+        this.flag = false;
+        this.setFlag(false)
       }
     },
      created() {

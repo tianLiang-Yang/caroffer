@@ -1,7 +1,9 @@
-import request from '@/utils/request';
+import request from '@/utils/request'; //axios 的二次封装
 
-// 获取详情页车系图片列表
+export let getImageList = (params) => {
+    return request(`/v2-car-getImageList.html`, { params })
+}
 
-export let getCarTypeImage = (id) => {
-    return request.get(`/v2-car-getImageList.html?SerialID=${id}`)
+export let getYearColorList = (id) => {
+    return request(`/v2-car-getModelImageYearColor.html?SerialID=${id}`)
 }

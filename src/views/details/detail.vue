@@ -2,7 +2,7 @@
   <div class="detail" v-if="Object.keys(lists).length">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" @click="$router.push({path:'/swiper',query:{id:SerialID}})"/>
+        <img :src="lists.CoverPhoto" @click="$router.push(`/swiper?SerialID=${lists.SerialID}`)"/>
         <span class="imgCount">{{lists.pic_group_count}}张图片</span>
       </div>
       <!--询问底价 -------------------------------------------- -->
@@ -23,7 +23,7 @@
         >{{item}}</span>
       </div>
       <!-- 列表 ------------------------------------------------- -->
-      <List :list="currentList" />
+      <List :list="currentList" :lists="lists"/>
       <!-- ------------------------------------------- -->
       <div class="footer" @click="$router.push({path:'/base'})">
         <p>{{lists.BottomEntranceTitle}}</p>
@@ -38,7 +38,6 @@ import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      SerialID: this.$route.query.id,
       curIndex: 0
     };
   },

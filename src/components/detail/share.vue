@@ -4,7 +4,7 @@
      <!-- ------------------------------------------ -->
      <div class="content" v-for="(item,index) in currentList" :key="index">
          <p class="text">{{item.key}}</p>
-         <div @click="close" class="box" v-for="(val,ind) in item.list" :key="ind">  
+         <div @click="close(val.car_id)" class="box" v-for="(val,ind) in item.list" :key="ind">  
            <p>
              <span>{{val.market_attribute.year}}款{{val.car_name}}</span>
              <span>{{val.market_attribute.dealer_price_min}}起</span>
@@ -23,8 +23,8 @@
 export default {
  props:["currentList"],
  methods:{
-   close(){ 
-      this.$emit('change',false);
+   close(carid){ 
+      this.$emit('change',{flag:false,carid:carid});
    }
  }
 }

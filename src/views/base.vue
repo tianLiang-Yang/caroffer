@@ -19,11 +19,11 @@
       <div class="message">
         <p>
           <span>姓名</span>
-          <span>阿斯顿</span>
+          <input type="text" placeholder="请输入姓名">
         </p>
         <p>
           <span>手机</span>
-          <span>15135351744</span>
+          <input type="text" placeholder="请输入手机号">
         </p>
         <p>
           <span>城市</span>
@@ -72,7 +72,8 @@ export default {
   data() {
     return {
       show: false,
-      flag:false
+      flag:false,
+      carid:''
     };
   },
   components:{
@@ -86,8 +87,10 @@ export default {
     })
   },
   methods: {
-    change(flag){
-      this.flag = flag;
+    change(obj){
+      this.flag = obj.flag;
+      console.log(obj.carid);
+      this.carid = obj.carid;
     },
     share(){
       this.flag = true
@@ -111,14 +114,15 @@ export default {
     if (!this.$route.query.car_id) {
       params = {
         cityId: this.location.CityID,
-        carId: this.currentList[0].list[0].car_id
+        carId: this.currentList[0].list[0].car_id||this.carid
       };
     } else {
       params = {
         cityId: this.location.CityID,
-        carId: this.$route.query.car_id
+        carId: this.carid||this.$route.query.car_id
       };
     }
+    console.log(params);
     await this.getDealerList(params);
     console.log(this.currentList);
   }
@@ -215,14 +219,27 @@ export default {
   p {
     display: flex;
     line-height: 50px;
-    border-bottom: 1px solid rgb(236, 231, 231);
+    border-bottom: 1px solid #888;
     font-size: 18px;
     justify-content: space-between;
-    padding-right: 20px;
+    
   }
+}
+.message p:nth-child(1),.message p:nth-child(2){
+    span{
+      flex:1;
+    }
+    input{
+      flex:3;
+      outline: none;
+      border: none;
+      height:80%;
+    }
+    align-items: center;
 }
 .message p:nth-child(3) {
   position: relative;
+  padding-right: 20px;
 }
 .cityj {
   position: absolute;

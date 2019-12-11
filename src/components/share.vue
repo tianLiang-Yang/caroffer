@@ -68,8 +68,8 @@ export default {
         overflow-y: auto;
         box-sizing: border-box;
         position: fixed;
+        left: 0;
         top:0;
-        left:0;
     }
     .cartype>p{
        width:100%;

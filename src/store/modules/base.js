@@ -1,11 +1,11 @@
 import { getIpAddress, getDealerList, getCityId, getCarId } from '@/services/index'
 
 const state = {
-    list: [],
+    list: {},
     location: 0,
     name: '',
     cityid: '',
-    flag: false
+    flag: true
 }
 
 const mutations = {
@@ -14,17 +14,17 @@ const mutations = {
     },
     upgetIpAddress(state, payload) {
         state.list = payload
+
+
     },
     upsetClick(state, payload) {
         state.name = payload.name;
         state.cityid = payload.cityid;
-        console.log(state.cityid)
-    },
-    upsetFlag(state, payload) {
-        state.flag = payload
+        state.flag = payload.flag;
     },
     upDealerList(state, payload) {
         state.list = payload
+        console.log(state.list);
     },
     upCityId(state, payload) {
         state.location = payload
@@ -46,10 +46,6 @@ const actions = {
     async setClick({ commit }, payload) {
         let res = await payload;
         commit('upsetClick', res)
-    },
-    async setFlag({ commit }, payload) {
-        let res = await payload;
-        commit('upsetFlag', res)
     },
 
     async getCityId({ commit }, payload) {

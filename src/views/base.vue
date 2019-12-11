@@ -19,15 +19,15 @@
       <div class="message">
         <p>
           <span>姓名</span>
-          <input type="text" placeholder="请输入姓名">
+          <input type="text" placeholder="请输入姓名" />
         </p>
         <p>
           <span>手机</span>
-          <input type="text" placeholder="请输入手机号">
+          <input type="text" placeholder="请输入手机号" />
         </p>
         <p>
           <span>城市</span>
-          <span>{{location.CityName}}</span>
+          <span @click="click(location.CityName)">{{location.CityName}}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -56,47 +56,55 @@
       <!-- --------------------------------------------------------------- -->
       <div class="btn" v-show="show">询最低价</div>
     </div>
-     <transition name="slide-fade">
+    <transition name="slide-fade">
       <div v-show="flag" class="animation">
-       <Share :currentList="currentList" @change="change"/>
+        <Share :currentList="currentList" @change="change" />
       </div>
     </transition>
-    
+    <Share2 v-show="shares" :cityname="cityname" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import Share from '../components/detail/share';
+import Share from "../components/detail/share";
+import Share2 from "./share2";
 export default {
   data() {
     return {
       show: false,
-      flag:false,
-      carid:''
+      flag: false,
+      carid: "",
+      cityname: "",
+      shares: ""
     };
   },
-  components:{
-    Share
+  components: {
+    Share,
+    Share2
   },
   computed: {
     ...mapState({
       list: state => state.base.list,
       location: state => state.base.location,
       currentList: state => state.detail.currentList,
-       name:state => state.base.name,
-        cityid:state => state.base.cityid,
-        flag : state => state.base.flag
+      name: state => state.base.name,
+      cityid: state => state.base.cityid,
+      shareall: state => state.base.flag
     })
   },
   methods: {
-    change(obj){
+    click(item) {
+      this.cityname = item;
+      this.shares = this.shareall;
+    },
+    change(obj) {
       this.flag = obj.flag;
       console.log(obj.carid);
       this.carid = obj.carid;
     },
-    share(){
-      this.flag = true
+    share() {
+      this.flag = true;
     },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
@@ -109,10 +117,10 @@ export default {
       //首页弹窗列表数据
       getDealerList: "base/getDealerList",
       getCityId: "base/getCityId",
-       getIpAddress : 'base/getIpAddress',
-        getCarId : 'base/getCarId',
-        getCityList : 'share/getCityList',
-        setFlag: 'base/setFlag' 
+      getIpAddress: "base/getIpAddress",
+      getCarId: "base/getCarId",
+      getCityList: "share/getCityList",
+      setFlag: "base/setFlag"
     })
   },
   async created() {
@@ -121,12 +129,12 @@ export default {
     if (!this.$route.query.car_id) {
       params = {
         cityId: this.location.CityID,
-        carId: this.currentList[0].list[0].car_id||this.carid
+        carId: this.currentList[0].list[0].car_id || this.carid
       };
     } else {
       params = {
         cityId: this.location.CityID,
-        carId: this.carid||this.$route.query.car_id
+        carId: this.carid || this.$route.query.car_id
       };
     }
     console.log(params);
@@ -229,20 +237,20 @@ export default {
     border-bottom: 1px solid #888;
     font-size: 18px;
     justify-content: space-between;
-    
   }
 }
-.message p:nth-child(1),.message p:nth-child(2){
-    span{
-      flex:1;
-    }
-    input{
-      flex:3;
-      outline: none;
-      border: none;
-      height:80%;
-    }
-    align-items: center;
+.message p:nth-child(1),
+.message p:nth-child(2) {
+  span {
+    flex: 1;
+  }
+  input {
+    flex: 3;
+    outline: none;
+    border: none;
+    height: 80%;
+  }
+  align-items: center;
 }
 .message p:nth-child(3) {
   position: relative;
@@ -271,12 +279,12 @@ export default {
   width: 100%;
   display: flex;
   border-bottom: 1px solid #888;
-  padding:10px 0px;
+  padding: 10px 0px;
   .ipt {
     width: 5%;
     input {
-      width:10px;
-      height:20px;
+      width: 10px;
+      height: 20px;
       margin-top: 20px;
     }
   }

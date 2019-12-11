@@ -1,5 +1,5 @@
 <template>
-   <div class="allCity" v-show="flag" @click="none">
+   <div class="allCity" v-show="flag" @click="nones">
        <div class="block">
            <!-- $router.push({path:'/base',query:{name:item.CityName,cityid:item.CityID}} -->
            <p v-for="(item,index) in city" :key="index" @click="set(item)">
@@ -12,18 +12,15 @@
 <script>
 import {mapActions} from 'vuex'
 export default {
-    props:['none','flag','city'],
+    props:['nones','flag','city'],
     methods:{
         ...mapActions({
             setClick : 'base/setClick'
         }),
         set(item){
-            this.setClick({name:item.CityName,cityid:item.CityID});
+            this.setClick({name:item.CityName,cityid:item.CityID,flag:false});
             
         }
-    },
-    created(){
-        
     }
 }
 </script>

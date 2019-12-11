@@ -1,7 +1,7 @@
 <template>
   <div class="cartype">
      <p>自动定位</p>
-     <div class="title">{{this.$route.query.city}}</div>
+     <div class="title">{{cityname}}</div>
      <!-- ------------------------------------------ -->
      <p>省市</p>
      <!-- 省 -->
@@ -13,7 +13,7 @@
      </div>
      <!-- ------------------------------------------ -->
      <!-- 市 -->
-     <AllCity v-show="flag" :flag="flag" :none="none" :city="city"></AllCity>
+     <AllCity v-show="flag" :flag="flag" :nones="nones" :city="city"></AllCity>
   </div>
 </template>
 
@@ -21,6 +21,7 @@
 import AllCity from '../components/allCity'
 import {mapState,mapActions} from 'vuex'
 export default {
+  props:['cityname',"shares"],
     data(){
         return {
             flag:false
@@ -45,8 +46,8 @@ export default {
         this.flag = true;
         this.getCity(id)
       },
-      none(){
-        this.flag = false
+      nones(){
+        this.flag = false;
       }
     },
      created() {
@@ -75,9 +76,9 @@ export default {
     .title{
       width:100%;
       height: 40px;
+      font-size: 16px;
       line-height: 40px;
       background: #fff;
-      color: rgb(99, 169, 248);
       padding:0 10px;
       margin-top: 10px;
     }

@@ -27,7 +27,7 @@
         </p>
         <p @click="block">
           <span>城市</span>
-          <span>{{location.CityName}}</span>
+          <span>{{name || location.CityName}}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -57,9 +57,9 @@
       <div class="btn" v-show="show">询最低价</div>
     </div>
      <transition name="slide-fade">
-       
+        <Share  v-show="flag" :cityName="location.CityName"></Share>
     </transition>
-    <Share  v-show="flag" :cityName="location.cityName"></Share>
+    
   </div>
 </template>
 
@@ -89,11 +89,6 @@ export default {
     })
   },
   methods: {
-    // change(obj){
-    //   this.flag = obj.flag;
-    //   console.log(obj.carid);
-    //   this.carid = obj.carid;
-    // },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
@@ -119,18 +114,23 @@ export default {
     await this.getCarId();
     let params = {};
     if (!this.$route.query.car_id) {
+      // this.location.CityID
       params = {
-        cityId: this.location.CityID,
+        cityId:this.location.CityID,
         carId: this.currentList[0].list[0].car_id||this.carid
       };
+       this.getIpAddress(params);
     } else {
+      console.log(this.cityid)
       params = {
         cityId: this.location.CityID,
         carId: this.carid||this.$route.query.car_id
       };
+       console.log(params);
+       this.getIpAddress(params);
     }
-    console.log(params);
-    await this.getIpAddress(params);
+   
+    
   }
 };
 </script>

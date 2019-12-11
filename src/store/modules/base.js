@@ -41,7 +41,7 @@ const actions = {
     },
     async getIpAddress({ commit }, payload) {
         let res = await getIpAddress(payload);
-        console.log('res>>>', res)
+        console.log('res>>>', res.data)
         commit('upgetIpAddress', res.data)
     },
     async setClick({ commit }, payload) {

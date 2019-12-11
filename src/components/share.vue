@@ -1,7 +1,7 @@
 <template>
   <div class="cartype">
      <p>自动定位</p>
-     <div class="title">{{this.cityName}}</div>
+     <div class="title">{{name || cityName}}</div>
      <!-- ------------------------------------------ -->
      <p>省市</p>
      <!-- 省 -->
@@ -33,7 +33,8 @@ export default {
     computed:{
         ...mapState({
           list : state => state.share.list,
-          city : state => state.share.city
+          city : state => state.share.city,
+          name : state => state.base.name
         })
     },
     methods: {

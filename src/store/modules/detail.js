@@ -58,12 +58,9 @@ function paixu(list) {
 
 
     if (state.current == "全部") {
-        console.log(state.current);
         currentList = list.list;
     } else {
-
         currentList = list.list.filter(item => {
-
             return item.market_attribute.year == state.current
         })
     }

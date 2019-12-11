@@ -1,10 +1,12 @@
-import { getImageList, getYearColorList } from '@/services/index'
+import { getImageList, getYearColorList, getCarTypeImage } from '@/services/index'
 
 const state = {
-    imgList: [], //图片列表
     colorId: "4216", // 车系颜色
     carId: '', // 车款
     yearData: {}, //汽车颜色年份数据
+    imgList: [], //全部车系图片数据
+    EnlargementImgfalg: false,
+    carId: '' //选择的车款
 }
 
 const mutations = {
@@ -25,6 +27,22 @@ const mutations = {
     },
     setCarId(state, payload) {
         state.carId = payload;
+    },
+    updateImage(state, payload) {
+        //   state.imgList = payload
+        state.imgList = payload.map(item => {
+            item.List = item.List.map(val => {
+                val.Url = val.Url.replace('{0}', 3);
+                return val
+            })
+            return item
+        })
+    },
+    imgFlag() {
+        state.EnlargementImgfalg = true;
+    },
+    setCarId(state, payload) {
+
     }
 }
 
@@ -44,6 +62,12 @@ const actions = {
     async getYearColorList({ commit }, payload) {
         let res = await getYearColorList(payload)
         commit('getYear', res.data)
+
+    },
+    async getCarTypeImage({ commit }, payload) {
+        let res = await getCarTypeImage(payload);
+        commit('updateImage', res.data);
+
     }
 }
 

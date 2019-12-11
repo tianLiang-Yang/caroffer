@@ -1,10 +1,10 @@
 import request from '@/utils/request';
 
-//获取报价页面数据
-export let getCarId = () => {
-    return request.get(`/location-client.html`)
-}
-
-export let getIpAddress = ({cityId,carId}) => {
-    return request.get(`/v2-dealer-alllist.html?cityId=${cityId}&carId=${carId}`)
+//获取cityid
+export let getCityId = () => {
+    return request.get('/location-client.html')
+};
+//获取经销商数据
+export let getDealerList = ({ carId, cityId }) => {
+    return request.get(`/v2-dealer-alllist.html?carId=${carId}&cityId=${cityId}`)
 }

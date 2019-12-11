@@ -12,7 +12,7 @@
     </div>
     <!-- 内容--------------------------------------------- -->
     <div class="cont">
-      <div class="box" v-for="(item,index) in list" :key="index">
+      <div class="box" @click="$router.push({path:'/swiper',query:{id:$route.query.id,ColorId:item.ColorId}})" v-for="(item,index) in list" :key="index">
         <div class="left" :style="{background:item.Value}"></div>
         <div class="right">{{item.Name}}</div>
       </div>

@@ -36,20 +36,24 @@ import { mapState, mapActions } from "vuex";
 import Color from "@/components/Color/carColor.vue";
 import Car from "@/components/Color/carType.vue";
 export default {
-  data() {
-    return {
-      SerialID: "",
+    data(){
+        return {
+            serialId:'',
+            type:'全部车款',
+            id:this.$route.query.id,
+            ColorId:this.$route.query.ColorId,
+            SerialID: "",
       showColor: false,
       showCar:false
-    };
-  },
-  components: {
+        }
+    },
+     components: {
     Color,Car
   },
-  computed: {
+    computed: {
     ...mapState({
       imgList: state => state.img.imgList
-    })
+    }),
   },
   methods: {
     //映射函数
@@ -65,13 +69,16 @@ export default {
       this.showCar = true;
     }
   },
-  created() {
-    //路由接收参数
-    this.SerialID = this.$route.query.SerialID;
-    //调用接口获取图片列表
-    this.getImageList(this.SerialID);
+  mounted(){
+      this.SerialID = this.$route.query.SerialID;
+      this.serialId = this.$route.query.id
+      this.getCarTypeImage(this.serialId)
+      console.log('colorid-----',this.ColorId); 
+      console.log(this.imgList);
+       this.getImageList(this.SerialID);
+      
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

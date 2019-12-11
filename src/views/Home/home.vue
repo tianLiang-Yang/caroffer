@@ -15,7 +15,7 @@
     </div>
     <!-- 弹窗组件-------------------------------------------------------------------- -->
     <transition name="fade">
-      <Popup v-show="flag" @change="change" :carlist="carlist"></Popup>
+      <Popup v-show="flag" @change="change" :carlist="carlist" :MasterID="MasterID"></Popup>
     </transition>
   </div>
 </template>
@@ -35,7 +35,8 @@ export default {
       //保存元素的高度
       scrollH: [],
       //声明实例变量
-      homeBScroll: null
+      homeBScroll: null,
+      MasterID:''
     };
   },
   name: "home",
@@ -77,6 +78,7 @@ export default {
     },
     //弹窗--------------------------------------------------------------------
     async block(MasterID) {
+      this.MasterID = MasterID;
       //调用首页弹窗渲染数据
       await this.getMakeListByMasterBrandId(MasterID);
       this.flag = true;
@@ -96,6 +98,8 @@ export default {
   //渲染首页数据----------------------------------------------------------------
   async created() {
     await this.getMasterBrandList();
+    console.log(this.carlist);
+    
   },
   mounted() {
     this.$nextTick(() => {

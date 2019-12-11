@@ -11,7 +11,7 @@
           <p>{{lists.market_attribute.dealer_price}}</p>
           <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
         </div>
-        <div class="right" @click="$router.push({path:'/base',query:{data:currentList[0].list[0].car_id}})">询问底价</div>
+        <div class="right" @click="$router.push({path:'/base'})">询问底价</div>
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
@@ -25,7 +25,7 @@
       <!-- 列表 ------------------------------------------------- -->
       <List :list="currentList" :lists="lists"/>
       <!-- ------------------------------------------- -->
-      <div class="footer" @click="$router.push('/base')">
+      <div class="footer" @click="$router.push({path:'/base'})">
         <p>{{lists.BottomEntranceTitle}}</p>
         <p>本地经销商</p>
       </div>
@@ -65,10 +65,8 @@ export default {
       getInfoAndListById: "detail/getInfoAndListById"
     })
   },
-  async created() {
-    this.item = JSON.parse(sessionStorage.getItem("item"));
-    await this.getInfoAndListById(this.item.SerialID);
-    
+  async created() {  
+    await this.getInfoAndListById(this.$route.query.id);
   }
 };
 </script>

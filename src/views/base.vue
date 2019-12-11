@@ -1,97 +1,103 @@
 <template>
-  <div class="base" v-if="list">
-      <div class="title">可向多个商家咨询最低价,商家及时回复</div>
-      <div class="main" ref="main" @scroll="scroll">
+  <div class="base" v-if="Object.keys(list).length">
+    <div class="title">可向多个商家咨询最低价,商家及时回复</div>
+    <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
-          <div class="box" @click="$router.push({path:'/share',query:{id:location.CityID}})">
-              <div class="left">
-                  <img :src="list.Picture" alt />
-              </div>
-              <div class="right">
-                <p>{{list.AliasName}}</p>
-                <p>{{this.$route.query.type}}</p>
-                <div class="jian">&gt;</div>
-              </div>
-          </div>
-          <!-- -------------------------------------------------------- -->
-          <p class="details">个人信息</p>
-          <!-- ---------------------------------------------------------- -->
-          <div class="message">
-            <p>
-              <span>姓名</span>
-              <span><input type="text" placeholder="请输入姓名"></span>
-            </p>
-            <p>
-              <span>手机</span>
-              <span><input type="text" placeholder="请输入手机号"></span>
-            </p>
-            <!-- $router.push({path:'/share',query:{city:location.CityName}}) -->
-            <p @click="block">
-              <span>城市</span>
-              <span>{{ name || location.CityName }}</span>
-              <span class="cityj">&gt;</span>
-            </p>
-            <div class="floor">询最低价</div>
-          </div>
-          <!-- ---------------------------------------------------------- -->
-          <p ref="pp" class="details">选择报价经销商</p>
-          <!-- -------------------------------------------------------- -->
-          <div class="dealer">
-            <div class="content">
-              <div class="ipt">
-                <input type="checkbox" />
-              </div>
-              <div class="cont">
-                <p>北京中润发奥迪</p>
-                <p>北京市丰台区丽泽路99号</p>
-              </div>
-              <div class="city">
-                <p>
-                  <span></span>
-                  <span>万</span>
-                </p>
-                <p>售本市</p>
-              </div>
-            </div>
-          </div>
-          <!-- --------------------------------------------------------------- -->
-          <div class="btn" v-show="show">询最低价</div>
+      <div class="box" @click="share">
+        <div class="left">
+          <img :src="list.details.serial.Picture" />
+        </div>
+        <div class="right">
+          <p>{{list.details.serial.AliasName}}</p>
+          <p>{{list.details.market_attribute.year}}款{{list.details.car_name}}</p>
+          <div class="jian">&gt;</div>
+        </div>
       </div>
-      <!-- 全国省市组件 -->
-      <Share v-show="flag" :cityName="location.CityName"></Share>
+      <!-- -------------------------------------------------------- -->
+      <p class="details">个人信息</p>
+      <!-- ---------------------------------------------------------- -->
+      <div class="message">
+        <p>
+          <span>姓名</span>
+          <input type="text" placeholder="请输入姓名">
+        </p>
+        <p>
+          <span>手机</span>
+          <input type="text" placeholder="请输入手机号">
+        </p>
+        <p>
+          <span>城市</span>
+          <span>{{location.CityName}}</span>
+          <span class="cityj">&gt;</span>
+        </p>
+        <div class="floor">询最低价</div>
+      </div>
+      <!-- ---------------------------------------------------------- -->
+      <p ref="pp" class="details">选择报价经销商</p>
+      <!-- -------------------------------------------------------- -->
+      <div class="dealer">
+        <div class="content" v-for="(item,index) in list.list" :key="index">
+          <div class="ipt">
+            <input type="checkbox" />
+          </div>
+          <div class="cont">
+            <p>{{item.dealerShortName}}</p>
+            <p>{{item.address}}</p>
+          </div>
+          <div class="city">
+            <p>
+              <span></span>
+              <span>万</span>
+            </p>
+            <p>售{{item.saleRange}}</p>
+          </div>
+        </div>
+      </div>
+      <!-- --------------------------------------------------------------- -->
+      <div class="btn" v-show="show">询最低价</div>
+    </div>
+     <transition name="slide-fade">
+      <div v-show="flag" class="animation">
+       <Share :currentList="currentList" @change="change"/>
+      </div>
+    </transition>
+    
   </div>
 </template>
 
 <script>
-import Share from '../components/share'
-import {mapState,mapActions} from 'vuex'
+import { mapState, mapActions } from "vuex";
+import Share from '../components/detail/share';
 export default {
   data() {
     return {
-      list: [],
-      show: false
-      
+      show: false,
+      flag:false,
+      carid:''
     };
   },
   components:{
-      Share
+    Share
   },
-  computed:{
-      ...mapState({
-        lists:state => state.base.list,
-        location:state => state.base.location,
-        name:state => state.base.name,
+  computed: {
+    ...mapState({
+      list: state => state.base.list,
+      location: state => state.base.location,
+      currentList: state => state.detail.currentList,
+       name:state => state.base.name,
         cityid:state => state.base.cityid,
         flag : state => state.base.flag
-      })
+    })
   },
   methods: {
-    ...mapActions({
-        getIpAddress : 'base/getIpAddress',
-        getCarId : 'base/getCarId',
-        getCityList : 'share/getCityList',
-        setFlag: 'base/setFlag'   
-    }),
+    change(obj){
+      this.flag = obj.flag;
+      console.log(obj.carid);
+      this.carid = obj.carid;
+    },
+    share(){
+      this.flag = true
+    },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
@@ -99,39 +105,54 @@ export default {
         this.show = false;
       }
     },
-    block(){
-        this.setFlag(true)
+    ...mapActions({
+      //首页弹窗列表数据
+      getDealerList: "base/getDealerList",
+      getCityId: "base/getCityId",
+       getIpAddress : 'base/getIpAddress',
+        getCarId : 'base/getCarId',
+        getCityList : 'share/getCityList',
+        setFlag: 'base/setFlag' 
+    })
+  },
+  async created() {
+    await this.getCityId();
+    let params = {};
+    if (!this.$route.query.car_id) {
+      params = {
+        cityId: this.location.CityID,
+        carId: this.currentList[0].list[0].car_id||this.carid
+      };
+    } else {
+      params = {
+        cityId: this.location.CityID,
+        carId: this.carid||this.$route.query.car_id
+      };
     }
-  },
-  mounted(){
-
-  },
-   created() {
-    sessionStorage.setItem('id',this.$route.query.carId)
-    
-     this.item = JSON.parse(sessionStorage.getItem("item"));
-     this.list = this.item
-     this.getCarId();
-     let params = {};
-     if(!this.$route.query.carId){
-         params = {
-           cityId : this.$route.query.cityid,
-           carId : this.$route.query.data
-         }
-      }else{
-        params = {
-           cityId : this.cityid,
-           carId : this.$route.query.carId
-        }
-        console.log(params)
-      }
-      this.getIpAddress(params);
-     
-   }
+    console.log(params);
+    await this.getDealerList(params);
+    console.log(this.currentList);
+  }
 };
 </script>
 
 <style lang='scss' scoped>
+.animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+.slide-fade-enter,
+.silde-fade-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: transform 0.5s linear;
+}
 .base {
   width: 100%;
   height: 100%;
@@ -141,11 +162,12 @@ export default {
 }
 .title {
   width: 100%;
-  height: 35px;
+  height: 30px;
   background: rgb(124, 223, 124);
   color: #fff;
+  font-size: 16px;
   text-align: center;
-  line-height: 35px;
+  line-height: 30px;
 }
 .main {
   width: 100%;
@@ -170,14 +192,16 @@ export default {
   .right {
     flex: 4;
     position: relative;
+    overflow: hidden;
   }
 }
 .right p:first-child {
-  font-size: 20px;
-  line-height: 40px;
+  font-size: 16px;
+  line-height: 30px;
 }
-.right p:last-child {
-  font-size: 18px;
+.right p:nth-child(2) {
+  font-size: 16px;
+  line-height: 30px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -192,7 +216,7 @@ export default {
 }
 .details {
   font-size: 13px;
-  line-height: 30px;
+  line-height: 25px;
   padding: 0 10px;
 }
 .message {
@@ -202,17 +226,27 @@ export default {
   p {
     display: flex;
     line-height: 50px;
-    border-bottom: 1px solid rgb(236, 231, 231);
+    border-bottom: 1px solid #888;
     font-size: 18px;
     justify-content: space-between;
-    padding-right: 20px;
+    
   }
+}
+.message p:nth-child(1),.message p:nth-child(2){
+    span{
+      flex:1;
+    }
+    input{
+      flex:3;
+      outline: none;
+      border: none;
+      height:80%;
+    }
+    align-items: center;
 }
 .message p:nth-child(3) {
   position: relative;
-}
-.message p input{
-  border:none;
+  padding-right: 20px;
 }
 .cityj {
   position: absolute;
@@ -223,6 +257,7 @@ export default {
   background: rgb(99, 169, 248);
   padding: 10px 30px;
   color: #fff;
+  font-size: 16px;
   text-align: center;
   border-radius: 5px;
   margin: 15px 30px 0;
@@ -234,12 +269,14 @@ export default {
 }
 .content {
   width: 100%;
-  border-top: 1px solid #ccc;
   display: flex;
-  padding: 20px 0;
+  border-bottom: 1px solid #888;
+  padding:10px 0px;
   .ipt {
     width: 5%;
     input {
+      width:10px;
+      height:20px;
       margin-top: 20px;
     }
   }
@@ -260,6 +297,7 @@ export default {
 }
 .cont p:last-child {
   font-size: 14px;
+  line-height: 20px;
   color: #ccc;
 }
 .city p:first-child span:last-child {
@@ -280,5 +318,6 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
+  font-size: 16px;
 }
 </style>

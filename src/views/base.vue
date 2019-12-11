@@ -125,6 +125,7 @@ export default {
       params = {
         cityId: this.location.CityID,
         carId: this.carid||this.$route.query.car_id
+        // 没完成今天的任务
       };
        console.log(params);
        this.getIpAddress(params);

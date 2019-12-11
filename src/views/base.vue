@@ -116,7 +116,7 @@ export default {
     if (!this.$route.query.car_id) {
       // this.location.CityID
       params = {
-        cityId: this.location.CityID,
+        cityId:this.location.CityID,
         carId: this.currentList[0].list[0].car_id||this.carid
       };
        this.getIpAddress(params);

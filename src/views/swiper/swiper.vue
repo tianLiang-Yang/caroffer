@@ -5,7 +5,7 @@
       <span>|</span>
       <span @click="setCar">车款</span>
     </div>
-
+    <!-- 图片列表 -->
     <div class="content">
       <ul v-for="(item,index) in imgList" :key="index">
         <li v-for="(val,i) in item.List" :key="i" :style="{backgroundImage:'url('+val.Url+' )'}"></li>
@@ -16,15 +16,18 @@
         </div>
       </ul>
     </div>
-    <!-- 车系颜色组件 -->
+    <!-- 车系颜色选择组件 -->
     <transition name="scroll-top">
       <Color v-if="showColor" :SerialID="SerialID" :showColor.sync="showColor"></Color>
       
     </transition>
-    <!-- 车系车款组件 -->
+    <!-- 车系车款选择组件 -->
     <transition name="scroll-top-c">
       <Car v-if="showCar" :SerialID="SerialID" :showCar.sync="showCar"></Car>
     </transition>
+
+    <!-- 图片轮播展示 -->
+    
   </div>
 </template>
 

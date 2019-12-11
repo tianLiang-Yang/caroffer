@@ -62,8 +62,6 @@ export default {
       this.showColor = true;
     },
     setCar(){
-     
-      
       this.showCar = true;
     }
   },

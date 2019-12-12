@@ -3,7 +3,7 @@
     <div class="title">可向多个商家咨询最低价,商家及时回复</div>
     <div class="main" ref="main" @scroll="scroll">
       <!-- -------------------------------------------------------- -->
-      <div class="box">
+      <div class="box" @click="cartype">
         <div class="left">
           <img :src="list.details.serial.Picture" />
         </div>
@@ -25,9 +25,9 @@
           <span>手机</span>
           <input type="text" placeholder="请输入手机号">
         </p>
-        <p @click="block">
+        <p>
           <span>城市</span>
-          <span>{{name || location.CityName}}</span>
+          <span @click="block">{{name || location.CityName}}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -59,24 +59,28 @@
      <transition name="slide-fade">
         <Share  v-show="flag" :cityName="location.CityName"></Share>
     </transition>
-    
+    <transition name="slide-fade">
+         <CarType v-show="carflag" @cartype="carclose"/>
+    </transition>
+   
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import Share from '../components/share';
+import CarType from '../components/carType';
 export default {
   data() {
     return {
       show: false,
-      // flag:false,
       carid:'',
-      // lists:{}
+      carflag:false
     };
   },
   components:{
-    Share
+    Share,
+    CarType
   },
   computed: {
     ...mapState({
@@ -89,6 +93,12 @@ export default {
     })
   },
   methods: {
+    carclose(item){
+      this.carflag = item
+    },
+    cartype(){
+      this.carflag = true
+    },
     scroll(e) {
       if (this.$refs.main.scrollTop >= this.$refs.pp.offsetTop) {
         this.show = true;
@@ -106,7 +116,7 @@ export default {
       setFlag: 'base/setFlag' 
     }),
     block(){
-      this.setFlag(true) 
+      this.setFlag(true)
     }
   },
   async created() {

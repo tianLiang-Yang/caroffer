@@ -11,7 +11,7 @@
           <p>{{lists.market_attribute.dealer_price}}</p>
           <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
         </div>
-        <div class="right" @click="$router.push({path:'/base',query:{lists}})">询问底价</div>
+        <div class="right" @click="xunjia1(lists.SerialId)">询问底价</div>
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
@@ -25,7 +25,7 @@
       <!-- 列表 ------------------------------------------------- -->
       <List :list="currentList" :lists="lists"/>
       <!-- ------------------------------------------- -->
-      <div class="footer" @click="$router.push({path:'/base'})">
+      <div class="footer" @click="xunjia1(lists.SerialId)">
         <p>{{lists.BottomEntranceTitle}}</p>
         <p>本地经销商</p>
       </div>
@@ -54,6 +54,15 @@ export default {
     })
   },
   methods: {
+    xunjia1(serialId){
+        localStorage.setItem('type',
+        JSON.stringify({
+          year: this.lists.list[0].market_attribute.year,
+          carname:this.lists.list[0].car_name
+        })
+        )
+        this.$router.push({path:'/base',query:{serialId}})
+    },
     ...mapMutations({
       setCurrent: "detail/setCurrent"
     }),
@@ -67,6 +76,7 @@ export default {
   },
   async created() {  
     await this.getInfoAndListById(this.$route.query.id);
+    console.log( this.lists);
   }
 };
 </script>

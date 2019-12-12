@@ -5,7 +5,8 @@ const state = {
     location: 0,
     name: '',
     cityid: '',
-    flag: true
+    flag: false,
+    flag2: false
 }
 
 const mutations = {
@@ -28,6 +29,10 @@ const mutations = {
     },
     upCityId(state, payload) {
         state.location = payload
+    },
+    upflag(state, payload) {
+        state.flag = payload
+        state.flag2 = payload
     }
 }
 
@@ -44,10 +49,12 @@ const actions = {
         commit('upgetIpAddress', res.data)
     },
     async setClick({ commit }, payload) {
-        let res = await payload;
-        commit('upsetClick', res)
-    },
 
+        commit('upsetClick', payload)
+    },
+    async setFlag({ commit }, payload) {
+        commit('upflag', payload)
+    },
     async getCityId({ commit }, payload) {
         let res = await getCityId();
         commit('upCityId', res.data)

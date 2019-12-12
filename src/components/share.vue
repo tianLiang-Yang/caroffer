@@ -13,7 +13,7 @@
      </div>
      <!-- ------------------------------------------ -->
      <!-- 市 -->
-     <AllCity v-show="flag" :flag="flag" :none="none" :city="city"></AllCity>
+     <AllCity v-show="flag" @change="change" :city="city"></AllCity>
   </div>
 </template>
 
@@ -34,11 +34,13 @@ export default {
         ...mapState({
           list : state => state.share.list,
           city : state => state.share.city,
-          name : state => state.base.name
+          name : state => state.base.name,
         })
     },
     methods: {
-      
+      change(item){
+        this.flag = item
+      },
       ...mapActions({
          getCityIdList:'share/getCityIdList', 
          getCity:'share/getCity' ,
@@ -84,8 +86,8 @@ export default {
       height: 40px;
       line-height: 40px;
       background: #fff;
-      color: rgb(99, 169, 248);
-      padding:0 10px;
+      font-size: 14px;
+      padding:0 15px;
       margin-top: 10px;
     }
     .content{

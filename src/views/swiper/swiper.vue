@@ -1,7 +1,7 @@
 <template>
   <div class="p-page">
     <div class="navTitle">
-      <span @click="setColor">颜色</span>
+      <span @click="$router.push({path:'/color',query:{id:SerialID}})">颜色</span>
       <span>|</span>
       <span @click="setCar">车款</span>
     </div>
@@ -32,13 +32,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions,mapMutations } from "vuex";
 import Color from "@/components/Color/carColor.vue";
 import Car from "@/components/Color/carType.vue";
+
+//引入分类列表组件
+import ImageTypeList from '@/components/ImageTypeList.vue';
+//引入轮播组件
+import ImageSwiper from '@/components/ImageSwiper.vue';
+//引入预览组件
+import ImagePreview from '@/components/ImagePreview.vue';
+//引入背景图懒加载
+import LazyLoad from '@/utils/lazyLoad';
+
 export default {
     data(){
         return {
-            serialId:'',
             type:'全部车款',
             id:this.$route.query.id,
             ColorId:this.$route.query.ColorId,
@@ -61,21 +70,14 @@ export default {
       getImageList: "img/getImageList",
       getCarTypeImage:"img/getCarTypeImage"
     }),
-    setColor() {
-      console.log('1111');
-      
-      this.showColor = true;
-    },
+ 
     setCar(){
       this.showCar = true;
     }
   },
   mounted(){
       this.SerialID = this.$route.query.SerialID;
-      this.serialId = this.$route.query.id
       this.getCarTypeImage(this.serialId)
-      console.log('colorid-----',this.ColorId); 
-      console.log(this.imgList);
        this.getImageList(this.SerialID);
        this.getCarTypeImage(this.SerialID);
       
@@ -138,6 +140,7 @@ export default {
         color: #fff;
         display: flex;
         flex-direction: column;
+        justify-content: center;
         text-align: center;
         padding-top: 10px;
         font-size:14px;

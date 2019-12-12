@@ -1,71 +1,49 @@
-import { getIpAddress, getDealerList, getCityId, getCarId } from '@/services/index'
+import { getDealerList, getCityId, getCityList } from '@/services/index'
 
 const state = {
-    list: {},
-    location: 0,
-    name: '',
-    cityid: '',
-    flag: false
+    DealerList: [],
+    city: 0,
+    cityList: [],
+    countyList: []
 }
 
 const mutations = {
-    upgetCarId(state, payload) {
-        state.location = payload
+    getDealerData(state, payload) {
+        state.DealerList = payload.list
     },
-    upgetIpAddress(state, payload) {
-        state.list = payload
-        console.log(state.list)
+    updateCityId(state, payload) {
+        state.city = payload
     },
-    upsetClick(state, payload) {
-        state.name = payload.name;
-        state.cityid = payload.cityid;
-        console.log(state.cityid)
+    updateCityList(state, payload) {
+        state.cityList = payload
     },
-    upsetFlag(state, payload) {
-        state.flag = payload
+    updateCountyList(state, payload) {
+        state.countyList = payload
     },
-    upDealerList(state, payload) {
-        state.list = payload
-    },
-    upCityId(state, payload) {
-        state.location = payload
-    }
 }
-
 const actions = {
 
-    async getCarId({ commit }, payload) {
-        let res = await getCarId();
-
-        commit('upgetCarId', res.data)
-    },
-    async getIpAddress({ commit }, payload) {
-        let res = await getIpAddress(payload);
-        console.log('res>>>', res.data)
-        commit('upgetIpAddress', res.data)
-    },
-    async setClick({ commit }, payload) {
-        let res = await payload;
-        commit('upsetClick', res)
-    },
-    async setFlag({ commit }, payload) {
-        let res = await payload;
-        commit('upsetFlag', res)
-    },
-
     async getCityId({ commit }, payload) {
-        let res = await getCityId();
-        commit('upCityId', res.data)
+        let res = await getCityId(payload)
+        commit('updateCityId', res.data)
     },
     async getDealerList({ commit }, payload) {
-        let res = await getDealerList(payload);
-        commit('upDealerList', res.data)
-        console.log(res)
+        let res = await getDealerList(payload)
+        commit('getDealerData', res.data)
+    },
+    async getCityList({ commit }, payload) {
+        let res = await getCityList(payload)
+        if (payload) {
+            commit('updateCountyList', res.data)
+        } else {
+            commit('updateCityList', res.data)
+        }
     }
 }
+
 export default {
     namespaced: true,
-    mutations,
     state,
+    mutations,
     actions
 }

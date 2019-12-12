@@ -1,17 +1,18 @@
 <template>
-  <div class="detail" v-if="Object.keys(lists).length">
+  <div class="detail" v-if="Object.keys(data).length">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" @click="$router.push(`/swiper?SerialID=${lists.SerialID}`)"/>
-        <span class="imgCount">{{lists.pic_group_count}}张图片</span>
+        <img :src="data.CoverPhoto" @click="$router.push(`/swiper?SerialID=${data.SerialID}`)"/>
+        <span class="imgCount">{{data.pic_group_count}}张图片</span>
       </div>
       <!--询问底价 -------------------------------------------- -->
       <div class="cont">
         <div class="left">
-          <p>{{lists.market_attribute.dealer_price}}</p>
-          <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
+          <p>{{data.market_attribute.dealer_price}}</p>
+          <p>指导价 {{data.market_attribute.official_refer_price}}</p>
         </div>
-        <div class="right" @click="$router.push({path:'/base',query:{lists}})">询问底价</div>
+        <div class="right" @click="$router.push({path:'/base',query:{val:data.list[0]}})">询问底价</div>
+        <!--  -->
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
@@ -23,10 +24,10 @@
         >{{item}}</span>
       </div>
       <!-- 列表 ------------------------------------------------- -->
-      <List :list="currentList" :lists="lists"/>
+      <List :list="currentList" :lists="data"/>
       <!-- ------------------------------------------- -->
-      <div class="footer" @click="$router.push({path:'/base'})">
-        <p>{{lists.BottomEntranceTitle}}</p>
+      <div class="footer" @click="$router.push({path:'/base',query:{val:data.list[0]}})">
+        <p>{{data.BottomEntranceTitle}}</p>
         <p>本地经销商</p>
       </div>
     </div>
@@ -47,10 +48,10 @@ export default {
   name: "detail",
   computed: {
     ...mapState({
-      lists: state => state.detail.list,
-      years: state => state.detail.year,
-      current: state => state.detail.current,
-      currentList: state => state.detail.currentList
+      data: state => state.detail.data,
+      years: state => state.detail.yearList,
+      current: state => state.detail.yearTab,
+      currentList: state => state.detail.tabData
     })
   },
   methods: {
@@ -64,6 +65,10 @@ export default {
     ...mapActions({
       getInfoAndListById: "detail/getInfoAndListById"
     })
+  },
+  mounted(){
+      let item = JSON.stringify(this.data);
+       sessionStorage.setItem("item", item);
   },
   async created() {  
     await this.getInfoAndListById(this.$route.query.id);

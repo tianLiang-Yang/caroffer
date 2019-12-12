@@ -1,99 +1,139 @@
 <template>
   <div class="p-page">
+    <!-- 汽车分类列表 -->
     <div class="navTitle">
-      <span @click="setColor">颜色</span>
+      <span @click="setColor" v-if="!colorName">颜色</span>
+      <span @click="setColor" v-else>{{colorName}}</span>
       <span>|</span>
       <span @click="setCar">车款</span>
     </div>
-    <!-- 图片列表 -->
+
     <div class="content">
       <ul v-for="(item,index) in imgList" :key="index">
-        <li v-for="(val,i) in item.List" :key="i" :style="{backgroundImage:'url('+val.Url+' )'}"></li>
+        <li v-for="(val,i) in item.List" :key="i" :style="{backgroundImage:'url('+val.Url+' )'}" @click.self="showSwiper(i, item.Count, item.List, item.Id)"></li>
         <!-- 遮罩层 -->
-        <div class="mask">
+        <div class="mask" @click="clickImageID(item.Id)">
           <p>{{item.Name}}</p>
           <p>{{item.Count}}&nbsp;张&nbsp;></p>
         </div>
       </ul>
     </div>
-    <!-- 车系颜色选择组件 -->
+
+    <!-- banner列表 -->
+     <!-- <ImageTypeList v-if="showImageList"/> -->
+
+    <!-- 颜色组件 -->
     <transition name="scroll-top">
       <Color v-if="showColor" :SerialID="SerialID" :showColor.sync="showColor"></Color>
-      
     </transition>
-    <!-- 车系车款选择组件 -->
-    <transition name="scroll-top-c">
+
+    <!-- 车款组件 -->
+    <transition name="scroll-top">
       <Car v-if="showCar" :SerialID="SerialID" :showCar.sync="showCar"></Car>
     </transition>
 
-    <!-- 图片轮播展示 -->
-    
+    <!-- 轮播预加载组件 -->
+    <!-- <ImagePreview v-if="showImageSwiper" :showImageSwiper.sync="showImageSwiper"></ImagePreview> -->
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import Color from "@/components/Color/carColor.vue";
-import Car from "@/components/Color/carType.vue";
+import { mapState, mapActions, mapMutations } from "vuex";
+//颜色组件
+import Color from "@/components/Color/Color.vue";
+//引入车款组件
+import Car from "@/components/Color/Car.vue";
+//引入分类列表组件
+// import ImageTypeList from "@/components/Color/ImageTypeList.vue";
+//引入轮播预览组件
+// import ImagePreview from "@/components/Color/ImagePreview.vue";
 export default {
-    data(){
-        return {
-            serialId:'',
-            type:'全部车款',
-            id:this.$route.query.id,
-            ColorId:this.$route.query.ColorId,
-            SerialID: "",
+  data() {
+    return {
+      SerialID: "",
       showColor: false,
-      showCar:false
-        }
-    },
-     components: {
-    Color,Car
+      showCar: false,
+      showImageList:false,
+      showImageSwiper:false
+    }
   },
-    computed: {
+  components: {
+    Color,
+    Car,
+    // ImageTypeList,
+    // ImagePreview
+  },
+  computed: {
     ...mapState({
-      imgList: state => state.img.imgList
-    }),
+      imgList: state => state.img.imgList,
+      colorName: state => state.img.colorName,
+      colorId: state => state.img.colorId,
+    })
+  },
+  watch: {
+    colorId() {
+      this.getImageList(this.SerialID);
+    },
+    carId() {
+      this.getImageList(this.SerialID);
+    }
   },
   methods: {
     //映射函数
     ...mapActions({
-      getImageList: "img/getImageList",
-      getCarTypeImage:"img/getCarTypeImage"
+      getImageList: "img/getImageList"
     }),
+    ...mapMutations({
+      setImageID: 'img/setImageId',
+      setSerialID:'img/setSerialID',
+      setCurrent: 'img/setCurrent',
+      setImageTypeList: 'img/setImageTypeList'
+    }),
+    //显示颜色组件
     setColor() {
-      console.log('1111');
-      
       this.showColor = true;
     },
-    setCar(){
+    //显示车款组件
+    setCar() {
       this.showCar = true;
+    },
+    showSwiper(index, Count, List, ImageID){
+      
+      this.setCurrent(index);
+      this.setImageID(ImageID)
+      this.setImageTypeList({
+        Count,
+        List,
+        ImageID
+      });
+      this.showImageSwiper = true;
+    },
+    // 点击分类进入分类列表
+    clickImageID(id){
+      console.log(id);
+      
+      this.setImageID(id);
+      this.showImageList = true;
     }
   },
-  mounted(){
-      this.SerialID = this.$route.query.SerialID;
-      this.serialId = this.$route.query.id
-      this.getCarTypeImage(this.serialId)
-      console.log('colorid-----',this.ColorId); 
-      console.log(this.imgList);
-       this.getImageList(this.SerialID);
-       this.getCarTypeImage(this.SerialID);
-      
+  created() {
+    //路由接收参数
+    this.SerialID = this.$route.query.SerialID;
+    //SerialID 存入store
+    this.setSerialID(this.SerialID);
+    //调用接口获取图片列表
+    this.getImageList(this.SerialID);
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .scroll-top-enter,
-.scroll-top-leave-to,
-.scroll-top-c-enter,
-.scroll-top-c-leave-to {
+.scroll-top-leave-to {
   transform: translate3d(0, 90%, 0);
 }
 .scroll-top-enter-active,
-.scroll-top-leave-active,
-.scroll-top-c-enter-active,
-.scroll-top-c-leave-active {
+.scroll-top-leave-active {
   transition: transform 0.6s linear;
 }
 .p-page {
@@ -109,7 +149,7 @@ export default {
     vertical-align: middle;
     font-size: 14px;
     color: #454545;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 0.16rem solid #f5f5f5;
     span {
       flex: 5;
       text-align: center;
@@ -128,9 +168,11 @@ export default {
       flex-wrap: wrap;
       border-bottom: 1px solid #fff;
       position: relative;
+      justify-content: space-between;
+      margin-bottom:5px;
       .mask {
-        width: 122px;
-        height: 130px;
+        width: 124px;
+        height:130px;
         position: absolute;
         top: 0;
         left: 0;
@@ -139,18 +181,18 @@ export default {
         display: flex;
         flex-direction: column;
         text-align: center;
-        padding-top: 10px;
-        font-size:14px;
+        padding-top: 50px;
+        font-size: 14px;
         p {
-          padding: 4px;
+          padding: 3px;
         }
       }
       li {
         background-position: center;
-        width: 122px;
-        height: 130px;
-        margin:3px 2px;
+        width: 124px;
+        height:130px;
         border: 1px solid #fff;
+        margin-bottom: 4px;
       }
     }
   }

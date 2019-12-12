@@ -2,7 +2,7 @@
   <div class="detail" v-if="Object.keys(lists).length">
     <div class="div">
       <div class="header">
-        <img :src="lists.CoverPhoto" @click="$router.push({path:'/swiper',query:{id:SerialID}})"/>
+        <img :src="lists.CoverPhoto" @click="$router.push(`/swiper?SerialID=${lists.SerialID}`)"/>
         <span class="imgCount">{{lists.pic_group_count}}张图片</span>
       </div>
       <!--询问底价 -------------------------------------------- -->
@@ -11,7 +11,7 @@
           <p>{{lists.market_attribute.dealer_price}}</p>
           <p>指导价 {{lists.market_attribute.official_refer_price}}</p>
         </div>
-        <div class="right" @click="$router.push('/base')">询问底价</div>
+        <div class="right" @click="$router.push({path:'/base',query:{lists}})">询问底价</div>
       </div>
       <!-- ----------------------------------------------- -->
       <div class="title">
@@ -23,9 +23,9 @@
         >{{item}}</span>
       </div>
       <!-- 列表 ------------------------------------------------- -->
-      <List :list="currentList" />
+      <List :list="currentList" :lists="lists"/>
       <!-- ------------------------------------------- -->
-      <div class="footer" @click="$router.push('/base')">
+      <div class="footer" @click="$router.push({path:'/base'})">
         <p>{{lists.BottomEntranceTitle}}</p>
         <p>本地经销商</p>
       </div>
@@ -38,7 +38,6 @@ import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      SerialID: this.$route.query.id,
       curIndex: 0
     };
   },
@@ -66,7 +65,7 @@ export default {
       getInfoAndListById: "detail/getInfoAndListById"
     })
   },
-  async created() {
+  async created() {  
     await this.getInfoAndListById(this.$route.query.id);
   }
 };

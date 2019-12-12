@@ -13,7 +13,11 @@ const mutations = {
 const actions = {
     async getMakeListByMasterBrandId({ commit }, payload) {
         let res = await getMakeListByMasterBrandId(payload);
+        console.log(payload);
+
         commit('upDateList', res.data)
+
+
     }
 }
 export default {

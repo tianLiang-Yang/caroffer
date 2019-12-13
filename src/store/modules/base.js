@@ -4,7 +4,9 @@ const state = {
     DealerList: [],
     city: 0,
     cityList: [],
-    countyList: []
+    countyList: [],
+    showCity:false,
+    CityName:''
 }
 
 const mutations = {
@@ -20,9 +22,15 @@ const mutations = {
     updateCountyList(state, payload) {
         state.countyList = payload
     },
+    upsetShowCity(state,payload){
+        state.showCity = payload
+    },
+    upgetCityName(state,payload){
+        state.CityName = payload
+    }
 }
 const actions = {
-
+    // 获取默认城市id name
     async getCityId({ commit }, payload) {
         let res = await getCityId(payload)
         commit('updateCityId', res.data)
@@ -38,6 +46,16 @@ const actions = {
         } else {
             commit('updateCityList', res.data)
         }
+    },
+    // 控制省组件显示隐藏
+    async setShowCity({commit},payload){
+        let res = payload;
+        commit('upsetShowCity',res)
+    },
+    // 获取选中城市的id name
+    async getCityName({commit},payload){
+        let res = payload;
+        commit('upgetCityName',res);
     }
 }
 

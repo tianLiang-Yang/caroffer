@@ -4,10 +4,10 @@
     <div class="main" ref="main" @scroll="scroll">
       <div class="box" @click="CarPage">
         <div class="left">
-          <img :src="item.Picture" alt />
+          <img :src="data.Picture" alt />
         </div>
         <div class="right">
-          <p>{{item.AliasName}}</p>
+          <p>{{data.AliasName}}</p>
           <p v-if="val.market_attribute!==undefined">{{val.market_attribute.year}}款 {{val.car_name}}</p>
           <div class="jian">&gt;</div>
         </div>
@@ -28,7 +28,7 @@
         </p>
         <p>
           <span>城市</span>
-          <span @click="getCity">{{city.CityName}}</span>
+          <span @click="getCity">{{CityName || city.CityName}}</span>
           <span class="cityj">&gt;</span>
         </p>
         <div class="floor">询最低价</div>
@@ -41,10 +41,10 @@
     </div>
 
     <transition name="scroll-top">
-      <CityList v-if="showCity" :showCity.sync="showCity"  :CityName="city.CityName"></CityList>
+      <CityList v-if="showCity" :val="this.$route.query.val" :showCity.sync="showCity"  :CityName="city.CityName"></CityList>
     </transition>
     <transition name="scroll-top">
-      <Car v-if="showCar" :showCar.sync="showCar" :type="'price'"></Car>
+      <Car v-if="showCar" :showCar.sync="showCar" :SerialID="data.SerialID" :type="'price'"></Car>
     </transition>
   </div>
 </template>
@@ -60,7 +60,6 @@ export default {
       show: false,
       item: {},
       val: {},
-      showCity: false,
       showCar: false
     };
   },
@@ -71,17 +70,21 @@ export default {
   },
   computed: {
     ...mapState({
+      data: state => state.detail.data,
       city: state => state.base.city,
-      DealerList1: state => state.base.DealerList
+      DealerList1: state => state.base.DealerList,
+      showCity : state => state.base.showCity,
+      CityName : state => state.base.CityName
     })
   },
   methods: {
     ...mapActions({
       getDealerList: "base/getDealerList",
-      getCityId: "base/getCityId"
+      getCityId: "base/getCityId",
+      setShowCity:"base/setShowCity"
     }),
     getCity() {
-      this.showCity = true;
+      this.setShowCity(true);
     },
     CarPage() {
       this.showCar = true;
@@ -94,12 +97,11 @@ export default {
       }
     }
   },
-  async mounted(){
-      this.item = JSON.parse(sessionStorage.getItem("item"));
+   mounted(){
       this.val = this.$route.query.val;
       console.log(this.val)
-      await this.getCityId();
-      let params = { carId: this.val.car_id, cityId: this.city.CityID };
+      this.getCityId();
+      let params = { carId: this.$route.query.val, cityId: this.city.CityID };
       this.getDealerList(params);
   },
    created() {
@@ -123,15 +125,16 @@ export default {
   display: flex;
   flex-direction: column;
   background: #f4f4f4;
+  font-size: 14px;
 }
 .title {
-  height: 0.6rem;
-  line-height: 0.6rem;
+  height: 30px;
+  line-height: 30px;
   width: 100%;
   background: #79cd92;
   text-align: center;
   color: #fff;
-  font-size: 0.3rem;
+  font-size: 14px;
 }
 .main {
   width: 100%;
@@ -140,14 +143,14 @@ export default {
 }
 .box {
   background: #fff;
-  padding: 0.32rem 0.18rem 0.24rem;
+  padding: 10px 15px ;
   position: relative;
-  height: 2rem;
+  height: 75px;
   box-sizing: border-box;
   display: flex;
   .left {
-    width: 2.3rem;
-    height: 1.41rem;
+    width: 100px;
+    height: 66px;
     border: 1px solid #eee;
     box-sizing: border-box;
     border-radius: 5px;
@@ -157,19 +160,19 @@ export default {
     }
   }
   .right {
-    margin-left: 0.2rem;
+    margin-left: 10px;
     flex: 4;
     position: relative;
     display: flex;
     flex-direction: column;
     p {
-      margin-top: 0.3rem;
-      max-width: 4.3rem;
+      margin-top: 8px;
+      max-width: 200px;
       color: #555;
     }
     p:nth-child(1) {
-      margin-top: 0.02rem;
-      font-size: 0.36rem;
+      margin-top: 5px;
+      font-size: 14px;
       line-height: 1.2;
       color: #333;
     }
@@ -180,7 +183,7 @@ export default {
   line-height: 40px;
 }
 .right p:last-child {
-  font-size: 18px;
+  font-size: 16px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -194,11 +197,10 @@ export default {
   font-weight: 900;
 }
 .details {
-  height: 0.5rem;
-  line-height: 0.5rem;
-  font-size: 13px;
-  padding: 0 0.22rem;
-  font-size: 0.24rem;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 15px;
+  font-size: 12px;
   color: #666;
   background: #eee;
 }
@@ -208,13 +210,12 @@ export default {
   background: #fff;
   p {
     display: flex;
-    line-height: 0.88rem;
+    line-height: 40px;
     border-bottom: 1px solid rgb(236, 231, 231);
-    font-size: 18px;
     justify-content: space-between;
-    font-size: 0.32rem;
-    height: 0.88rem;
-    line-height: 0.88rem;
+    font-size: 14px;
+    height: 50px;
+    line-height: 50px;
     border-bottom: 1px solid #eee;
     box-sizing: border-box;
     color: #555;
@@ -223,7 +224,7 @@ export default {
       color: #555;
     }
     input {
-      padding-right: 0.1rem;
+      padding-right: 5px;
       border: none;
     }
   }
@@ -235,11 +236,11 @@ export default {
   position: absolute;
   right: 0;
   color: #ccc;
-  padding-right: 0.1rem;
+  padding-right: 5px;
 }
 .floor {
   background: #3aacff;
-  padding: 0.2rem 1.2rem;
+  padding: 15px 10px;
   color: #fff;
   text-align: center;
   border-radius: 5px;

@@ -10,7 +10,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["countyList"],
+  props: ["countyList","val"],
   computed:{
     ...mapState({
       DealerList1: state => state.base.DealerList
@@ -18,16 +18,21 @@ export default {
   },
   methods: {
     ...mapActions({
-      getDealerList: "base/getDealerList"
+      getDealerList: "base/getDealerList",
+      getCityId: "base/getCityId",
+      setShowCity:"base/setShowCity",
+      getCityName:"base/getCityName"
     }),
-    cancel() {
-      this.$emit("update:showMask", false);
-      console.log("111");
-    },
     back(item) {
-      console.log(item.CityID);
-      let params ={cityId:item.CityID}
-      this.getDealerList()
+      console.log(item);
+      // let val = JSON.parse(localStorage.getItem(val));
+      let params ={carId:this.val.car_id,cityId:item.CityID};
+      console.log(params);
+      this.getCityId(item.CityID);
+      this.getCityName(item.CityName);
+      this.setShowCity(false);
+      this.$emit("update:showMask", false);
+      this.getDealerList(params)
     }
   }
 };
@@ -42,15 +47,16 @@ export default {
   top: 0;
   left: 0;
   display: flex;
+  font-size: 14px;
 }
 li {
-  padding-left: 0.3rem;
-  font-size: 0.28rem;
-  height: 0.8rem;
-  line-height: 0.8rem;
+  padding-left: 15px;
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
-  margin-left: 0.1rem;
+  margin-left: 10px;
   position: relative;
 }
 .left {

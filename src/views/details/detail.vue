@@ -24,7 +24,7 @@
         >{{item}}</span>
       </div>
       <!-- 列表 ------------------------------------------------- -->
-      <List :list="currentList" :lists="data"/>
+      <List :list="currentList" :SerialID="data.SerialID" :lists="data"/>
       <!-- ------------------------------------------- -->
       <div class="footer" @click="$router.push({path:'/base',query:{val:data.list[0]}})">
         <p>{{data.BottomEntranceTitle}}</p>
@@ -67,8 +67,6 @@ export default {
     })
   },
   mounted(){
-      let item = JSON.stringify(this.data);
-       sessionStorage.setItem("item", item);
   },
   async created() {  
     await this.getInfoAndListById(this.$route.query.id);

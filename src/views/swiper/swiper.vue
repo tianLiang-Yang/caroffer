@@ -20,7 +20,7 @@
     </div>
 
     <!-- banner列表 -->
-     <!-- <ImageTypeList v-if="showImageList"/> -->
+     <ImageTypeList v-if="showImageList"/>
 
     <!-- 颜色组件 -->
     <transition name="scroll-top">
@@ -33,7 +33,7 @@
     </transition>
 
     <!-- 轮播预加载组件 -->
-    <!-- <ImagePreview v-if="showImageSwiper" :showImageSwiper.sync="showImageSwiper"></ImagePreview> -->
+    <ImagePreview v-if="showImageSwiper" :showImageSwiper.sync="showImageSwiper"></ImagePreview>
   </div>
 </template>
 
@@ -44,9 +44,9 @@ import Color from "@/components/Color/Color.vue";
 //引入车款组件
 import Car from "@/components/Color/Car.vue";
 //引入分类列表组件
-// import ImageTypeList from "@/components/Color/ImageTypeList.vue";
+import ImageTypeList from "@/components/Color/ImageTypeList.vue";
 //引入轮播预览组件
-// import ImagePreview from "@/components/Color/ImagePreview.vue";
+ import ImagePreview from "@/components/Color/ImagePreview.vue";
 export default {
   data() {
     return {
@@ -60,8 +60,8 @@ export default {
   components: {
     Color,
     Car,
-    // ImageTypeList,
-    // ImagePreview
+    ImageTypeList,
+    ImagePreview
   },
   computed: {
     ...mapState({

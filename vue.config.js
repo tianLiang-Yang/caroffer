@@ -20,4 +20,6 @@ module.exports = {
             }
         }
     },
+    publicPath:'/1704B/dongwenkang/',
+    productionSourceMap:false
 }

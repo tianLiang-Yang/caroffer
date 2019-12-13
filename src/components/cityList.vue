@@ -16,7 +16,7 @@
     </div>
 
     <transition name="scroll-top">
-      <MaskBox v-if="showMask"  :showMask.sync="showMask" :countyList="countyList"></MaskBox>
+      <MaskBox v-if="showMask" :val="val" :showMask.sync="showMask" :countyList="countyList"></MaskBox>
     </transition>
   </div>
 </template>
@@ -25,7 +25,7 @@
 import { mapState, mapActions } from "vuex";
 import MaskBox from "@/components/mask";
 export default {
-  props: ["CityName"],
+  props: ["CityName","val"],
   data() {
     return {
       showMask: false
@@ -51,6 +51,7 @@ export default {
     }
   },
   async created() {
+    localStorage.setItem('val',JSON.stringify(this.val));
     await this.getCityList();
     console.log(this.cityList);
   }
@@ -78,11 +79,11 @@ export default {
   overflow: auto;
 }
 .details {
-  height: 0.5rem;
-  line-height: 0.5rem;
+  height:30px;
+  line-height: 30px;
   font-size: 13px;
-  padding: 0 0.22rem;
-  font-size: 0.24rem;
+  padding: 0 15px;
+  font-size: 14px;
   color: #666;
   background: #eee;
 }
@@ -90,13 +91,13 @@ export default {
   width: 100%;
 }
 li {
-  padding-left: 0.3rem;
-  font-size: 0.28rem;
-  height: 0.8rem;
-  line-height: 0.8rem;
+  padding-left: 15px;
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
-  margin-left: 0.1rem;
+  margin-left: 10px;
   position: relative;
 }
 </style>

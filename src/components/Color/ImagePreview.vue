@@ -6,7 +6,7 @@
       @change="change"
       :start-position="current"
     >
-      <template v-slot:index>{{`${current+1}/${count}`}}</template>
+      <template class="box" v-slot:index>{{`${current+1}/${count}`}}</template>
     </van-image-preview>
   </div>
 </template>
@@ -43,10 +43,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      getImageTypeList: "picture/getImageTypeList"
+      getImageTypeList: "img/getImageTypeList"
     }),
     ...mapMutations({
-      setCurrent: "picture/setCurrent"
+      setCurrent: "img/setCurrent"
     }),
     change(index) {
       this.setCurrent(index);
@@ -66,5 +66,8 @@ export default {
 <style lang="scss" scoped>
 .preview /deep/ .van-image-preview__overlay {
   background: #000;
+}
+van-image-preview .van-image-preview__index{
+  font-size: 40px;
 }
 </style>

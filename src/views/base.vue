@@ -97,15 +97,12 @@ export default {
       }
     }
   },
-   mounted(){
+   created() {
       this.val = this.$route.query.val;
       console.log(this.val)
       this.getCityId();
       let params = { carId: this.$route.query.val, cityId: this.city.CityID };
       this.getDealerList(params);
-  },
-   created() {
-    
   }
 };
 </script>

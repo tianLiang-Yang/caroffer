@@ -68,9 +68,10 @@ const mutations = {
     },
     // 图片列表
     setImageTypeList(state, payload) {
+        console.log(payload)
         state.Count = payload.Count;
         // 实现上拉加载
-        if (state.page == 1) {
+        if (state.Page == 1) {
             state.imageTypeList = payload.List;
         } else {
             state.imageTypeList = state.imageTypeList.concat(payload.List);

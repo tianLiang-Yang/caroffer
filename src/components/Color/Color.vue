@@ -83,7 +83,7 @@ export default {
   top: 0;
   left: 0;
   background: #f4f4f4;
-  
+  font-size:14px;
 }
 .top-c {
   margin-top: 10px;

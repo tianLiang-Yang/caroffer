@@ -1,23 +1,39 @@
 <template>
   <div class="p-page">
     <!-- 汽车分类列表 -->
-    <div class="navTitle">
-      <span @click="setColor" v-if="!colorName">颜色</span>
-      <span @click="setColor" v-else>{{colorName}}</span>
-      <span>|</span>
-      <span @click="setCar">车款</span>
+    <div class="title">
+      <p @click="setColor">
+        <span>{{name}}</span>
+        <span class="iconfont">&nbsp;&nbsp;&nbsp;&nbsp;↓</span>
+      </p>
+      <p @click="setCar">
+        <span>{{car}}</span>
+        <span class="iconfont">&nbsp;&nbsp;&nbsp;&nbsp;↓</span>
+      </p>
     </div>
 
-    <div class="content">
-      <ul v-for="(item,index) in imgList" :key="index">
-        <li v-for="(val,i) in item.List" :key="i" :style="{backgroundImage:'url('+val.Url+' )'}" @click.self="showSwiper(i, item.Count, item.List, item.Id)"></li>
-        <!-- 遮罩层 -->
-        <div class="mask" @click="clickImageID(item.Id)">
-          <p>{{item.Name}}</p>
-          <p>{{item.Count}}&nbsp;张&nbsp;></p>
+    <div class="main">
+        <div class="img" :v-if="imgList.length" v-for="(item,index) in imgList" :key="index">
+          <div>
+            <div
+              v-for="(item1,index1) in item.List"
+              :key="index1"
+              @click.self="showSwiper(index1, item.Count, item.List, item.Id)"
+              :style="{
+              background:'url('+item1.Url+')',
+              backgroundSize:'cover',  
+              backgroundRepeat:'no-repeat',
+              backgroundPosition:'center'}"
+              class="imgS"
+            >
+              <div v-if="index1==0" @click="clickImageID(item.Id)">
+                <span>{{item.Name}}</span>
+                <span>{{item.Count}}></span>
+              </div>
+            </div>
+          </div>
         </div>
-      </ul>
-    </div>
+      </div>
 
     <!-- banner列表 -->
      <ImageTypeList v-if="showImageList"/>
@@ -54,7 +70,9 @@ export default {
       showColor: false,
       showCar: false,
       showImageList:false,
-      showImageSwiper:false
+      showImageSwiper:false,
+      name: "颜色",
+      car: "车款"
     }
   },
   components: {
@@ -141,60 +159,64 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  .navTitle {
-    width: 100%;
-    display: flex;
-    line-height: 50px;
-    vertical-align: middle;
+}
+.title {
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  p {
+    flex: 1;
+    text-align: center;
     font-size: 14px;
-    color: #454545;
-    border-bottom: 0.16rem solid #f5f5f5;
-    span {
-      flex: 5;
-      text-align: center;
-    }
-    span:nth-child(2) {
-      flex: 1;
+    display: flex;
+    justify-content: center;
+    .iconfont {
+      line-height: 15px;
       color: #ccc;
     }
   }
-  .content {
-    flex: 1;
-    box-sizing: border-box;
-    overflow: scroll;
-    ul {
+  p:first-child {
+    border-right: 1px solid #ececec;
+  }
+}
+ .main {
+  width: 100%;
+  flex: 1;
+}
+.img {
+  margin-top: 3px;
+  width: 100%;
+  height: auto;
+  div {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    div {
+      width: 122px;
+      height: 120px;
+      margin: 3px 2.5px;
       display: flex;
-      flex-wrap: wrap;
-      border-bottom: 1px solid #fff;
-      position: relative;
-      justify-content: space-between;
-      margin-bottom:5px;
-      .mask {
-        width: 124px;
-        height:130px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: rgba(56, 90, 130, 0.5);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        padding-top: 50px;
-        font-size: 14px;
-        p {
-          padding: 3px;
-        }
-      }
-      li {
-        background-position: center;
-        width: 124px;
-        height:130px;
-        border: 1px solid #fff;
-        margin-bottom: 4px;
-      }
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
+.imgS div{
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .5);
+}
+.imgS span {
+  color: #fff;
+  font-size: 14px;
+  
+}
+
 </style>

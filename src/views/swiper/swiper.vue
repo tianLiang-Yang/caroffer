@@ -25,12 +25,9 @@
     <transition name="scroll-top-c">
       <Car v-if="showCar" :SerialID="SerialID" :showCar.sync="showCar"></Car>
     </transition>
-
     <!-- 图片轮播展示 -->
-    
   </div>
 </template>
-
 <script>
 import { mapState, mapActions,mapMutations } from "vuex";
 import Color from "@/components/Color/carColor.vue";

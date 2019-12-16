@@ -1,38 +1,44 @@
-import { getInfoAndListById } from '@/services/index';
+import { getInfoAndListById } from '@/services/index.js'
 
 const state = {
-        list: [],
-        year: ['全部'],
-        current: '全部',
-        currentList: []
-    }
-    //给车款排序
-function sortList(list) {
-    //排序规则 排量升序 && 功率升序 && 自然吸气>涡轮增压
+    data: {},
+    yearTab: '全部',
+    yearList: [], //nav
+    tabData: [] //下方的数据
+}
+
+//多重排序
+function tabListSort(list) {
+    //排序规则 
+    //  1.排序exhaust(排量) 数字 
+    //  2.排序max_power(功率) 数字 
+    //  3.排序inhale_type(吸气方式) 字符串
     list.sort((a, b) => {
-        if (a.exhaust_str == b.exhaust_str) {
-            if (a.max_power_str == b.max_power_str) {
+        if (a.exhaust === b.exhaust) {
+            if (a.max_power === b.max_power) {
                 return b.inhale_type > a.inhale_type;
             } else {
-                return a.max_power_str - b.max_power_str;
+                return a.max_power - b.max_power
             }
         } else {
-            return a.exhaust - b.exhaust;
+            return a.exhaust - b.exhaust
         }
     })
     return list
 }
-//格式化数据
-function carList(list) {
-    //拼接每款车的key 排量/功率 吸气方式
-    list = list.map(item => {
+
+//处理请求的数据变为咱们想要的数据
+function createTabList(list) {
+    //给数据添加一个key属性 用来展示在页面的一条数据（方式为 排量/功率 吸气方式）
+    list.map(item => {
         item.key = `${item.exhaust_str}/${item.max_power_str} ${item.inhale_type}`;
         return item;
-    })
+    });
     let newList = [];
-    //遍历，根据key聚合数据
     list.forEach(item => {
-        let index = newList.findIndex(value => value.key == item.key);
+        //采用findindex 来处理数据 
+        let index = newList.findIndex(val => val.key === item.key);
+        //newList 中的一项的key属性 与 item相等的话 就添加进那一项的list中 否则添加一个新的对象 格式如{key: item.key,list: [item]}
         if (index !== -1) {
             newList[index].list.push(item);
         } else {
@@ -45,50 +51,55 @@ function carList(list) {
     return newList
 }
 
-function paixu(list) {
-    state.list = list
-        //处理数据  拿到年份 
-    state.year = ["全部"]
-    let year = list.list.map(item => item.market_attribute.year);
-    //concat 连接数组的方法
+function getTabData(data) {
 
-    state.year = state.year.concat([...new Set(year)])
-        //拿到当前选择年份的数据
+    state.tabData = data;
+
+    state.yearList = ["全部"];
+    //拿到年份tab
+    let year = data.list.map(item => item.market_attribute.year);
+
+    let arr = [...new Set(year)];
+
+    state.yearList = state.yearList.concat(arr);
+
+
     let currentList = [];
 
+    if (state.yearTab == '全部') {
+        currentList = data.list;
 
-    if (state.current == "全部") {
-        currentList = list.list;
     } else {
-        currentList = list.list.filter(item => {
-            return item.market_attribute.year == state.current
-        })
+        currentList = data.list.filter(item => item.market_attribute.year == state.yearTab);
     }
-    //给当前年份数据排序
-    currentList = sortList(currentList);
-    //聚合key相同的车款数据
-    currentList = carList(currentList);
-    state.currentList = currentList
+
+    // 3.给当前年份数据排序
+    currentList = tabListSort(currentList);
+
+    // 4.聚合key相同的车款数据
+    currentList = createTabList(currentList);
+
+    state.tabData = currentList;
 }
+
 const mutations = {
-    detaillist(state, payload) {
-        if (payload.code === 1) {
-            paixu(payload.data)
-        } else {
-            alert(payload.msg)
-        }
+    getlist(state, payload) {
+        state.data = payload;
+        getTabData(state.data);
     },
-    setCurrent(state, payload) {
-        state.current = payload;
-        paixu(state.list);
+    changeYearList(state, payload) {
+        state.yearTab = payload;
+        getTabData(state.data);
     }
 }
+
 const actions = {
     async getInfoAndListById({ commit }, payload) {
-        let res = await getInfoAndListById(payload);
-        commit('detaillist', res)
+        let res = await getInfoAndListById(payload)
+        commit('getlist', res.data)
     }
 }
+
 export default {
     namespaced: true,
     state,

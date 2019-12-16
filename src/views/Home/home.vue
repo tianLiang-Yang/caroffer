@@ -135,4 +135,7 @@ export default {
   right: 15px;
   text-align: center;
 }
+#home .box ul li{
+  line-height: 20px;
+}
 </style>

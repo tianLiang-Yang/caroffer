@@ -1,66 +1,67 @@
-import { getIpAddress, getDealerList, getCityId, getCarId } from '@/services/index'
+import { getDealerList, getCityId, getCityList } from '@/services/index'
 
 const state = {
-    list: {},
-    location: 0,
-    name: '',
-    cityid: '',
-    flag: true
+    DealerList: [],
+    city: 0,
+    cityList: [],
+    countyList: [],
+    showCity:false,
+    CityName:''
 }
 
 const mutations = {
-    upgetCarId(state, payload) {
-        state.location = payload
+    getDealerData(state, payload) {
+        state.DealerList = payload.list
     },
-    upgetIpAddress(state, payload) {
-        state.list = payload
-
-
+    updateCityId(state, payload) {
+        state.city = payload
     },
-    upsetClick(state, payload) {
-        state.name = payload.name;
-        state.cityid = payload.cityid;
-        state.flag = payload.flag;
+    updateCityList(state, payload) {
+        state.cityList = payload
     },
-    upDealerList(state, payload) {
-        state.list = payload
-        console.log(state.list);
+    updateCountyList(state, payload) {
+        state.countyList = payload
     },
-    upCityId(state, payload) {
-        state.location = payload
+    upsetShowCity(state,payload){
+        state.showCity = payload
+    },
+    upgetCityName(state,payload){
+        state.CityName = payload
     }
 }
-
 const actions = {
-
-    async getCarId({ commit }, payload) {
-        let res = await getCarId();
-
-        commit('upgetCarId', res.data)
-    },
-    async getIpAddress({ commit }, payload) {
-        let res = await getIpAddress(payload);
-        console.log('res>>>', res)
-        commit('upgetIpAddress', res.data)
-    },
-    async setClick({ commit }, payload) {
-        let res = await payload;
-        commit('upsetClick', res)
-    },
-
+    // 获取默认城市id name
     async getCityId({ commit }, payload) {
-        let res = await getCityId();
-        commit('upCityId', res.data)
+        let res = await getCityId(payload)
+        commit('updateCityId', res.data)
     },
     async getDealerList({ commit }, payload) {
-        let res = await getDealerList(payload);
-        commit('upDealerList', res.data)
-        console.log(res)
+        let res = await getDealerList(payload)
+        commit('getDealerData', res.data)
+    },
+    async getCityList({ commit }, payload) {
+        let res = await getCityList(payload)
+        if (payload) {
+            commit('updateCountyList', res.data)
+        } else {
+            commit('updateCityList', res.data)
+        }
+    },
+    // 控制省组件显示隐藏
+    async setShowCity({commit},payload){
+        let res = payload;
+        commit('upsetShowCity',res)
+    },
+    // 获取选中城市的id name
+    async getCityName({commit},payload){
+        let res = payload;
+        commit('upgetCityName',res);
     }
 }
+
 export default {
     namespaced: true,
-    mutations,
     state,
+    mutations,
     actions
 }

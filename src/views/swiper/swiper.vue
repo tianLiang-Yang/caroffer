@@ -1,98 +1,156 @@
 <template>
   <div class="p-page">
-    <div class="navTitle">
-      <span @click="$router.push({path:'/color',query:{id:SerialID}})">颜色</span>
-      <span>|</span>
-      <span @click="setCar">车款</span>
+    <!-- 汽车分类列表 -->
+    <div class="title">
+      <p @click="setColor">
+        <span>{{name}}</span>
+        <span class="iconfont">&nbsp;&nbsp;&nbsp;&nbsp;↓</span>
+      </p>
+      <p @click="setCar">
+        <span>{{car}}</span>
+        <span class="iconfont">&nbsp;&nbsp;&nbsp;&nbsp;↓</span>
+      </p>
     </div>
-    <!-- 图片列表 -->
-    <div class="content">
-      <ul v-for="(item,index) in imgList" :key="index">
-        <li v-for="(val,i) in item.List" :key="i" :style="{backgroundImage:'url('+val.Url+' )'}"></li>
-        <!-- 遮罩层 -->
-        <div class="mask">
-          <p>{{item.Name}}</p>
-          <p>{{item.Count}}&nbsp;张&nbsp;></p>
+
+    <div class="main">
+        <div class="img" :v-if="imgList.length" v-for="(item,index) in imgList" :key="index">
+          <div>
+            <div
+              v-for="(item1,index1) in item.List"
+              :key="index1"
+              @click.self="showSwiper(index1, item.Count, item.List, item.Id)"
+              :style="{
+              background:'url('+item1.Url+')',
+              backgroundSize:'cover',  
+              backgroundRepeat:'no-repeat',
+              backgroundPosition:'center'}"
+              class="imgS"
+            >
+              <div v-if="index1==0" @click="clickImageID(item.Id)">
+                <span>{{item.Name}}</span>
+                <span>{{item.Count}}></span>
+              </div>
+            </div>
+          </div>
         </div>
-      </ul>
-    </div>
-    <!-- 车系颜色选择组件 -->
+      </div>
+
+    <!-- banner列表 -->
+     <ImageTypeList v-if="showImageList"/>
+
+    <!-- 颜色组件 -->
     <transition name="scroll-top">
       <Color v-if="showColor" :SerialID="SerialID" :showColor.sync="showColor"></Color>
-      
     </transition>
-    <!-- 车系车款选择组件 -->
-    <transition name="scroll-top-c">
+
+    <!-- 车款组件 -->
+    <transition name="scroll-top">
       <Car v-if="showCar" :SerialID="SerialID" :showCar.sync="showCar"></Car>
     </transition>
-    <!-- 图片轮播展示 -->
+
+    <!-- 轮播预加载组件 -->
+    <ImagePreview v-if="showImageSwiper" :showImageSwiper.sync="showImageSwiper"></ImagePreview>
   </div>
 </template>
 <script>
-import { mapState, mapActions,mapMutations } from "vuex";
-import Color from "@/components/Color/carColor.vue";
-import Car from "@/components/Color/carType.vue";
-
+import { mapState, mapActions, mapMutations } from "vuex";
+//颜色组件
+import Color from "@/components/Color/Color.vue";
+//引入车款组件
+import Car from "@/components/Color/Car.vue";
 //引入分类列表组件
-import ImageTypeList from '@/components/ImageTypeList.vue';
-//引入轮播组件
-import ImageSwiper from '@/components/ImageSwiper.vue';
-//引入预览组件
-import ImagePreview from '@/components/ImagePreview.vue';
-//引入背景图懒加载
-import LazyLoad from '@/utils/lazyLoad';
-
+import ImageTypeList from "@/components/Color/ImageTypeList.vue";
+//引入轮播预览组件
+ import ImagePreview from "@/components/Color/ImagePreview.vue";
 export default {
-    data(){
-        return {
-            type:'全部车款',
-            id:this.$route.query.id,
-            ColorId:this.$route.query.ColorId,
-            SerialID: "",
+  data() {
+    return {
+      SerialID: "",
       showColor: false,
-      showCar:false
-        }
-    },
-     components: {
-    Color,Car
+      showCar: false,
+      showImageList:false,
+      showImageSwiper:false,
+      name: "颜色",
+      car: "车款"
+    }
   },
-    computed: {
+  components: {
+    Color,
+    Car,
+    ImageTypeList,
+    ImagePreview
+  },
+  computed: {
     ...mapState({
-      imgList: state => state.img.imgList
-    }),
+      imgList: state => state.img.imgList,
+      colorName: state => state.img.colorName,
+      colorId: state => state.img.colorId,
+    })
+  },
+  watch: {
+    colorId() {
+      this.getImageList(this.SerialID);
+    },
+    carId() {
+      this.getImageList(this.SerialID);
+    }
   },
   methods: {
     //映射函数
     ...mapActions({
-      getImageList: "img/getImageList",
-      getCarTypeImage:"img/getCarTypeImage"
+      getImageList: "img/getImageList"
     }),
- 
-    setCar(){
+    ...mapMutations({
+      setImageID: 'img/setImageId',
+      setSerialID:'img/setSerialID',
+      setCurrent: 'img/setCurrent',
+      setImageTypeList: 'img/setImageTypeList'
+    }),
+    //显示颜色组件
+    setColor() {
+      this.showColor = true;
+    },
+    //显示车款组件
+    setCar() {
       this.showCar = true;
+    },
+    showSwiper(index, Count, List, ImageID){
+      
+      this.setCurrent(index);
+      this.setImageID(ImageID)
+      this.setImageTypeList({
+        Count,
+        List,
+        ImageID
+      });
+      this.showImageSwiper = true;
+    },
+    // 点击分类进入分类列表
+    clickImageID(id){
+      console.log(id);
+      
+      this.setImageID(id);
+      this.showImageList = true;
     }
   },
-  mounted(){
-      this.SerialID = this.$route.query.SerialID;
-      this.getCarTypeImage(this.serialId)
-       this.getImageList(this.SerialID);
-       this.getCarTypeImage(this.SerialID);
-      
+  created() {
+    //路由接收参数
+    this.SerialID = this.$route.query.SerialID;
+    //SerialID 存入store
+    this.setSerialID(this.SerialID);
+    //调用接口获取图片列表
+    this.getImageList(this.SerialID);
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .scroll-top-enter,
-.scroll-top-leave-to,
-.scroll-top-c-enter,
-.scroll-top-c-leave-to {
+.scroll-top-leave-to {
   transform: translate3d(0, 90%, 0);
 }
 .scroll-top-enter-active,
-.scroll-top-leave-active,
-.scroll-top-c-enter-active,
-.scroll-top-c-leave-active {
+.scroll-top-leave-active {
   transition: transform 0.6s linear;
 }
 .p-page {
@@ -100,59 +158,64 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  .navTitle {
-    width: 100%;
-    display: flex;
-    line-height: 50px;
-    vertical-align: middle;
+}
+.title {
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  p {
+    flex: 1;
+    text-align: center;
     font-size: 14px;
-    color: #454545;
-    border-bottom: 1px solid #f5f5f5;
-    span {
-      flex: 5;
-      text-align: center;
-    }
-    span:nth-child(2) {
-      flex: 1;
+    display: flex;
+    justify-content: center;
+    .iconfont {
+      line-height: 15px;
       color: #ccc;
     }
   }
-  .content {
-    flex: 1;
-    box-sizing: border-box;
-    overflow: scroll;
-    ul {
+  p:first-child {
+    border-right: 1px solid #ececec;
+  }
+}
+ .main {
+  width: 100%;
+  flex: 1;
+}
+.img {
+  margin-top: 3px;
+  width: 100%;
+  height: auto;
+  div {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    div {
+      width: 122px;
+      height: 120px;
+      margin: 3px 2.5px;
       display: flex;
-      flex-wrap: wrap;
-      border-bottom: 1px solid #fff;
-      position: relative;
-      .mask {
-        width: 122px;
-        height: 130px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: rgba(56, 90, 130, 0.5);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        padding-top: 10px;
-        font-size:14px;
-        p {
-          padding: 4px;
-        }
-      }
-      li {
-        background-position: center;
-        width: 122px;
-        height: 130px;
-        margin:3px 2px;
-        border: 1px solid #fff;
-      }
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
+.imgS div{
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .5);
+}
+.imgS span {
+  color: #fff;
+  font-size: 14px;
+  
+}
+
 </style>

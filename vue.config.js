@@ -20,6 +20,8 @@ module.exports = {
             }
         }
     },
+    publicPath: '/1704B/dongwenkang/',
+    productionSourceMap: false,
     publicPath: '/1704B/yangtianliang/',
     productionSourceMap: false
 }

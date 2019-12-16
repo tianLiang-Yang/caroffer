@@ -1,18 +1,15 @@
-import request from '@/utils/request';
+import request from '@/utils/request'; //axios 的二次封装
 
-//获取cityid
+
 export let getCityId = () => {
-    return request.get('/location-client.html')
-};
-//获取cityid
-export let getCarId = () => {
-    return request.get('/location-client.html')
-};
-//获取经销商数据
-export let getDealerList = ({ carId, cityId }) => {
-    return request.get(`/v2-dealer-alllist.html?carId=${carId}&cityId=${cityId}`)
+    return request('/location-client.html')
 }
-//获取经销商数据
-export let getIpAddress = ({ carId, cityId }) => {
-    return request.get(`/v2-dealer-alllist.html?carId=${carId}&cityId=${cityId}`)
+
+// 获取经销商列表
+export let getDealerList = (params) => {
+    return request('/v2-dealer-alllist.html', { params })
+}
+
+export let getCityList = (params) => {
+    return request('/v1-city-alllist.html', { params })
 }

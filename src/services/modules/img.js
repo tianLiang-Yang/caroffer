@@ -4,7 +4,7 @@ export let getImageList = (params) => {
     return request(`/v2-car-getImageList.html`, { params })
 }
 
-export let getCarTypeImage = (params) => {
+export let getImageTypeList = (params) => {
     return request(`/v2-car-getImageList.html`, { params })
 }
 

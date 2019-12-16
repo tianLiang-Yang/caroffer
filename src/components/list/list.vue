@@ -12,7 +12,7 @@
           <span>指导价{{val.market_attribute.official_refer_price}}</span>
           <span>{{val.market_attribute.dealer_price_min}}</span>
         </p>
-        <p @click="xunjia2(val)">询问底价</p>
+        <p @click="$router.push({path:'/base',query:{val:val}})">询问底价</p>
       </div>
     </div>
   </div>
@@ -21,20 +21,13 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["list","lists"],
- methods:{
-   xunjia2(val){
-     localStorage.setItem(
-       'type',
-       JSON.stringify({
-         year:val.market_attribute.year,
-         carname:val.car_name
-       })
-     )
-     this.$router.push('/base')
-   }
- }
- 
+  props: ["list","lists","SerialID"],
+  computed:{
+     
+  },
+  created(){
+    
+  }
 };
 </script>
 

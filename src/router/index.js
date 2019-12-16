@@ -17,21 +17,11 @@ const routes = [{
         component: () =>
             import ('../views/img/img')
     },
-    {
-        path: "/color",
-        component: () =>
-            import ('../views/img/color')
-    },
-    {
-        path: '/allcolor',
-        component: () =>
-            import ('../views/swiper/allColor/allcolor.vue')
-    },
-    {
-        path: '/cartype',
-        component: () =>
-            import ('../views/swiper/carType/cartype.vue')
-    },
+    // {
+    //     path: "/color",
+    //     component: () =>
+    //         import ('../views/img/color')
+    // },
     {
         path: "/detail",
         component: () =>

@@ -3,7 +3,7 @@
     <div class="popup">
         <div class="box" v-for="(item,index) in carlist" :key="index">
             <P>{{item.GroupName}}</P>
-            <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val.SerialID)">
+            <div class="ul" v-for="(val,key) in item.GroupList" :key="key" @click="login(val)">
                 <li><img :src="val.Picture" v-lazy="val.Picture" alt=""> <span><h4>{{val.AliasName}}</h4> <p>{{val.DealerPrice}}</p></span></li>
             </div>
         </div>
@@ -14,9 +14,9 @@
 export default {
     props:['carlist'],
     methods:{
-         login(id){
-             localStorage.setItem('id',id);
-             console.log(id)
+         login(val){
+             console.log(val)
+             
              this.$router.push('/xiang')
          }
     }

@@ -52,7 +52,6 @@
     <ImagePreview v-if="showImageSwiper" :showImageSwiper.sync="showImageSwiper"></ImagePreview>
   </div>
 </template>
-
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 //颜色组件

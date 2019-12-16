@@ -55,6 +55,15 @@ export default {
     })
   },
   methods: {
+    xunjia1(serialId){
+        localStorage.setItem('type',
+        JSON.stringify({
+          year: this.lists.list[0].market_attribute.year,
+          carname:this.lists.list[0].car_name
+        })
+        )
+        this.$router.push({path:'/base',query:{serialId}})
+    },
     ...mapMutations({
       setCurrent: "detail/changeYearList"
     }),
@@ -62,6 +71,7 @@ export default {
       this.curIndex = index;
       _hmt.push(['_trackEvent','详情页','年份切换',index])
       this.setCurrent(item);
+        _hmt.push(['_trackEvent', 'tab切换', index]);
     },
     ...mapActions({
       getInfoAndListById: "detail/getInfoAndListById"
@@ -71,6 +81,7 @@ export default {
   },
   async created() {  
     await this.getInfoAndListById(this.$route.query.id);
+    console.log( this.lists);
   }
 };
 </script>

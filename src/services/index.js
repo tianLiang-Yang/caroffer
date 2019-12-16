@@ -7,3 +7,4 @@ export * from './modules/carlist'
 export * from './modules/color'
 export * from './modules/base'
 export * from './modules/share';
+export * from './modules/pic';

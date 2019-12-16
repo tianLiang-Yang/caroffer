@@ -5,8 +5,8 @@ const state = {
     city: 0,
     cityList: [],
     countyList: [],
-    showCity:false,
-    CityName:''
+    showCity: false,
+    CityName: ''
 }
 
 const mutations = {
@@ -22,10 +22,10 @@ const mutations = {
     updateCountyList(state, payload) {
         state.countyList = payload
     },
-    upsetShowCity(state,payload){
+    upsetShowCity(state, payload) {
         state.showCity = payload
     },
-    upgetCityName(state,payload){
+    upgetCityName(state, payload) {
         state.CityName = payload
     }
 }
@@ -48,14 +48,14 @@ const actions = {
         }
     },
     // 控制省组件显示隐藏
-    async setShowCity({commit},payload){
+    async setShowCity({ commit }, payload) {
         let res = payload;
-        commit('upsetShowCity',res)
+        commit('upsetShowCity', res)
     },
     // 获取选中城市的id name
-    async getCityName({commit},payload){
+    async getCityName({ commit }, payload) {
         let res = payload;
-        commit('upgetCityName',res);
+        commit('upgetCityName', res);
     }
 }
 

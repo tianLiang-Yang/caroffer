@@ -1,33 +1,49 @@
-import { getMasterBrandList } from '@/services/index'
+import { getMasterBrandList, getMakeListByMasterBrandId } from '@/services/index'
 
 const state = {
-    list: []
+    list: [],
+    carlist:[]
 }
 
 const mutations = {
-    updateList(state, payload) {
-        state.list = payload
-    }
+    updateList(state, payload) { //得到主页面数据并且处理
+        payload.forEach((item, index) => {
+            item.title = item.Spelling.slice(0, 1);
+        });
+        let arrnum = payload.map((item, index) => {
+            return item.Spelling.slice(0, 1)
+        })
+        let arrsort = Array.from(new Set(arrnum))
+        let result = []
+        arrsort.forEach((item, index) => {
+            let obj = {};
+            let arr = [];
+            obj.title = item
+            for (let i = payload.length - 1; i >= 0; i--) {
+                if (item === payload[i].Spelling.slice(0, 1)) {
+                    arr.unshift(payload[i])
+                    payload.splice(i, 1)
+                }
+            }
+            obj.data = [...arr]
+            result.push(obj)
+        })
+        state.list = result
+    
+    },
+    getCarlist(state, payload) { // 抽屉的数据
+        state.carlist = payload
+    },
 }
 
 const actions = {
-    async getMasterBrandList({ commit }, payload) {
+    async getMasterBrandList({ commit }, payload) { //请求主页面数据
         let res = await getMasterBrandList();
-        res.data.forEach(item => {
-            item.title = item.Spelling.slice(0, 1);
-        })
-        let data2 = [];
-        res.data.filter(item => {
-            if (data2.findIndex(val => item.title == val.title) == -1) {
-                data2.push({
-                    title: item.title
-                })
-            }
-        })
-        data2.forEach(item => {
-            item.data = res.data.filter(val => val.Spelling.slice(0, 1) == item.title)
-        })
-        commit('updateList', data2);
+        commit('updateList', res.data);
+    },
+    async getMakeListByMasterBrandId({ commit }, payload) { //请求侧栏车系数据
+        let res = await getMakeListByMasterBrandId(payload);
+        commit('getCarlist', res.data);
     }
 }
 

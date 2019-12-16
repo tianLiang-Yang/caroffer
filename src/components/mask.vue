@@ -1,6 +1,6 @@
 <template>
   <div class="mask">
-    <div class="left" @click="cancel()"></div>
+    <div class="left"></div>
     <div class="right">
       <li v-for="(item,index) in countyList" :key="index" @click="back(item)">{{item.CityName}}</li>
     </div>

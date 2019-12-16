@@ -97,11 +97,12 @@ export default {
       }
     }
   },
-   created() {
+   async created() {
+      await this.getCityId();
       this.val = this.$route.query.val;
       console.log(this.val)
-      this.getCityId();
-      let params = { carId: this.$route.query.val, cityId: this.city.CityID };
+      
+      let params = { carId: this.val.car_id, cityId: this.city.CityID };
       this.getDealerList(params);
   }
 };

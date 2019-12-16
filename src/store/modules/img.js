@@ -3,8 +3,8 @@ import { getImageList, getYearColorList, getImageTypeList } from '@/services/ind
 const state = {
     imgList: [], //分类图片列表
     imageTypeList: [], //分类图片列表
-    colorId: 0, // 车系颜色id
-    carId: 0, // 车款id
+    colorId: "", // 车系颜色id
+    carId: "", // 车款id
     ImageID: "", //分类id
     SerialID: "", //车系id
     yearData: {}, //汽车颜色年份数据

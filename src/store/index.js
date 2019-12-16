@@ -4,7 +4,6 @@ import popuplist from './modules/popuplist'
 import img from './modules/img'
 import detail from './modules/detail'
 import home from './modules/home'
-import carlist from './modules/carlist'
 import color from './modules/color'
 import base from './modules/base'
 import share from './modules/share'
@@ -18,7 +17,6 @@ export default new Vuex.Store({
         img,
         detail,
         home,
-        carlist,
         color,
         base,
         share

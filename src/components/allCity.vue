@@ -18,6 +18,7 @@ export default {
             setClick : 'base/setClick'
         }),
         set(item){
+            this.$emit("showMask",false);
             this.setClick({name:item.CityName,cityid:item.CityID});
             
         }

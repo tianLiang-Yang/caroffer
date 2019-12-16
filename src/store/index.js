@@ -9,7 +9,7 @@ import carlist from './modules/carlist'
 import color from './modules/color'
 import share from './modules/share'
 import pic from './modules/pic'
-import creareLogger from 'vuex/dist/logger';
+// import creareLogger from 'vuex/dist/logger';
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,5 +25,5 @@ export default new Vuex.Store({
         base,
         share
     },
-    plugins: [creareLogger()]
+    // plugins: [creareLogger()]
 })

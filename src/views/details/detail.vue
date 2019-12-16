@@ -69,6 +69,7 @@ export default {
     click(index, item) {
       this.curIndex = index;
       this.setCurrent(item);
+        _hmt.push(['_trackEvent', 'tab切换', index]);
     },
     ...mapActions({
       getInfoAndListById: "detail/getInfoAndListById"

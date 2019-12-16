@@ -8,7 +8,7 @@
         </div>
         <div class="right">
           <p>{{data.AliasName}}</p>
-          <p v-if="val.market_attribute!==undefined">{{val.market_attribute.year}}款 {{val.car_name}}</p>
+          <p>{{data.list[0].market_attribute.year}}款 {{data.list[0].car_name}}</p>
           <div class="jian">&gt;</div>
         </div>
       </div>
@@ -98,10 +98,10 @@ export default {
     }
   },
    created() {
-      this.val = this.$route.query.val;
-      console.log(this.val)
       this.getCityId();
-      let params = { carId: this.$route.query.val, cityId: this.city.CityID };
+      let params = { carId: this.$route.query.val.car_id, cityId: this.city.CityID };
+      console.log(this.data);
+      
       this.getDealerList(params);
   }
 };

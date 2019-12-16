@@ -127,13 +127,13 @@ export default {
     },
     // 点击分类进入分类列表
     clickImageID(id){
-      console.log(id);
-      
       this.setImageID(id);
       this.showImageList = true;
     }
   },
   created() {
+    console.log(this.imgList);
+    
     //路由接收参数
     this.SerialID = this.$route.query.SerialID;
     //SerialID 存入store
@@ -185,6 +185,7 @@ export default {
  .main {
   width: 100%;
   flex: 1;
+  overflow: auto;
 }
 .img {
   margin-top: 3px;

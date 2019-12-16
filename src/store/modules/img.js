@@ -38,7 +38,6 @@ const mutations = {
     // 修改图片分类id
     setImageId(state, payload) {
         state.ImageID = payload;
-        console.log(state.ImageID);
     },
     // 改变颜色id
     setColorId(state, payload) {
@@ -105,7 +104,6 @@ const actions = {
 
         //接收四个参数SerialID，ImageID，Page，PageSize
         console.log(state.Page);
-
         if (payload) {
             commit('setPage', payload);
         }
@@ -116,14 +114,13 @@ const actions = {
             PageSize: state.PageSize
         }
         console.log(params);
-
         let res = await getImageTypeList(params);
         let { Count, List } = res.data;
         console.log(res.data);
         commit('setImageTypeList', { Count, List });
+        console.log(params);
     }
 }
-
 export default {
     namespaced: true,
     state,

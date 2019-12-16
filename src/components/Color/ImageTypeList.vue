@@ -24,7 +24,8 @@ export default {
     ...mapState({
       count: state => state.img.Count,
       value: state => state.img.imageTypeList,
-      Page: state => state.img.Page
+      Page: state => state.img.Page,
+      ImageID:state =>state.img.ImageID
     }),
     pullDownRefreshObj: () => {
         return {
@@ -81,17 +82,9 @@ export default {
       setCurrent:"img/setCurrent"
     }),
     async onPullingDown() {
-        // console.log('pullingdown...');
-        // setTimeout(()=>{
-        //     this.refreshDispatch(1);
-        // }, 10000);
         await this.refreshDispatch(1);
     },
     async onPullingUp() {
-        // console.log('pullingup...');
-        // setTimeout(()=>{
-            // this.loadMoreDispatch(this.page + 1);
-        // }, 10000);
         await this.loadMoreDispatch(this.page + 1);
     },
     showSwiper(index) {
@@ -104,7 +97,9 @@ export default {
     }
   },
   mounted() {
-    this.getImageTypeList();
+    this.getImageTypeList(this.ImageID);
+    console.log(this.ImageID);
+    
   }
 };
 </script>

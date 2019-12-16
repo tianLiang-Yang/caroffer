@@ -5,7 +5,6 @@ const state = {
     list: [],
     CarId: "", //车款id
     ColorID: "", //颜色id
-
     SerialID: "", //车系id
     ImageID: "", //分类id
     imageList: [], //分类图片列表

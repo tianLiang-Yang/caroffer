@@ -56,10 +56,11 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setCurrent: "detail/setCurrent"
+      setCurrent: "detail/changeYearList"
     }),
     click(index, item) {
       this.curIndex = index;
+      _hmt.push(['_trackEvent','详情页','年份切换',index])
       this.setCurrent(item);
     },
     ...mapActions({

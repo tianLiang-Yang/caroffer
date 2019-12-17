@@ -1,6 +1,6 @@
 <template>
-  <div class="wrap">
-    <scroll
+  <div class="wrap" v-if="value">
+    <Scroll
             ref="scroll"
             :data="value"
             :pullDownRefresh="pullDownRefreshObj"
@@ -9,9 +9,9 @@
             @pullingUp="onPullingUp"
         >
             <ul>
-                <span :key="index" @click="showSwiper(index)" v-for="(item, index) in value" :style="{backgroundImage: 'url('+item.Url.replace('{0}', item.LowSize)+')'}"/>
+                <span :key="index" @click="showSwiper(index)" v-for="(item, index) in value" :style="{backgroundImage: 'url('+item.Url.replace('{0}', item.LowSize)+')'}" @click.self="showSwiper(index1, item.Count, item.List, item.Id)"/>
             </ul>
-        </scroll>
+        </Scroll>
   </div>
 </template>
 

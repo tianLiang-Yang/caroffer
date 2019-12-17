@@ -37,6 +37,7 @@ export default {
     position: fixed;
     top:0;
     left:0;
+    overflow: auto;
 }
 .allCity .block{
     width: 75%;
